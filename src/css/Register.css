@@ -1,0 +1,5 @@
+@keyframes glitter {
+    50% { background-color: #ed2b9c; }
+    0% { background-color: #9d13bf; }
+    100% { background-color: #9d13bf; }
+}

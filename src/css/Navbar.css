@@ -1,0 +1,9 @@
+@keyframes glitter {
+    100% { color: #9d13bf; }
+    100% { color: #f00; }
+    100% { color: #9d13bf; }
+}
+
+.glitter {
+    animation: glitter 1.5s infinite;
+}
