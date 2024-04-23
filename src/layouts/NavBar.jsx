@@ -8,6 +8,10 @@ import MenuList from '@mui/material/MenuList';
 import axios from 'axios'
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
+
+
+
+
 import { Link,useNavigate } from 'react-router-dom';
 import '../css/Navbar.css';
 import { useContext } from 'react';
@@ -17,25 +21,17 @@ import Swal from 'sweetalert2';
 
 import StateContext from '../context/StateContext';
 import DispatchContxt from '../context/DispatchContxt';
+// import googleuserContext from '../context/googleuserContext';
 
 
 const NavBar = () => {
 
 
     const navigate = useNavigate()
+    
     const GlobalState = useContext(StateContext)
     const GlobalDispatch = useContext(DispatchContxt)
-
-
-    // const [anchorEl, setAnchorEl] = React.useState(null);
-    // const open = Boolean(anchorEl);
-    // const handleClick = (event) => {
-    //   setAnchorEl(event.currentTarget);
-    // };
-    // const handleClose = () => {
-    //   setAnchorEl(null);
-    // };
-
+    // const { userInfo } = useContext(googleuserContext);
     
 
     const StyledToolbar = styled(Toolbar)({
@@ -68,45 +64,125 @@ const NavBar = () => {
       const MenuItems = [
         { Name: "Job Listings", Link: "/listings" },
         { Name: "Job Vacancy", Link: "/home" },
-        { Name: "Add Jobs", Link: "/home" },
+        { Name: "Add Jobs", Link: "/addproperty" },
         { Name: "About Us", Link: "/home"},
         
       ];
-      async function HandleLogOut() {
-        try {
+    //   async function HandleLogOut() {
+    //     try {
+    //       const { isConfirmed } = await Swal.fire({
+    //         title: "Do you want to logout ?",
+    //         showDenyButton: true,
+    //         confirmButtonText: "Logout",
+    //         denyButtonText: "Cancel",
+    //       });
+      
+    //       if (isConfirmed) {
+    //         const response = await axios.post(
+    //           'http://127.0.0.1:8000/api-auth-djoser/token/logout/', // Replace with your actual endpoint
+    //           {}, // Djoser might not require data in the body for logout
+    //           {
+    //             headers: { Authorization: `Token ${GlobalState.userToken}` },
+    //           }
+    //         );
+      
+    //         if (response.status === 204 || response.status === 200) { // Handle both 204 (No Content) and 200 (OK)
+    //           GlobalDispatch({ type: 'logout' });
+    //           navigate('/');
+    //           Swal.fire("Logout successful", "", "success");
+    //         } else {
+    //           console.error('Error occurred during logout:', response.data);
+    //           Swal.fire("Error", "An error occurred during logout", "error");
+    //         }
+    //       } else {
+    //         Swal.fire("Logout cancelled", "", "info");
+    //       }
+    //     } catch (error) {
+    //       console.error('Error occurred during logout:', error);
+    //       Swal.fire("Error", "An error occurred during logout", "error");
+    //     }
+    //   }
+
+    //   async function GoogleLogOut() {
+    //     try {
+    //         // Check if user is logged in with Google
+    //         if (GlobalState.GoogleToken) {
+    //             // Use the provided method for Google logout
+    //             await logout(); // Use the appropriate method provided by @react-oauth/google
+    
+    //             // Dispatch action to clear Google authentication state
+    //             GlobalDispatch({ type: 'googleLogout' });
+    
+    //             // Clear Google-related data from localStorage
+    //             localStorage.removeItem('The GoogleToken');
+    
+    //             // Optionally, you can navigate the user to the home page or perform other actions
+    //             navigate('/');
+    //             Swal.fire("Google Logout successful", "", "success");
+    //         }
+    
+    //         // Handle normal logout
+    //         // Code for normal logout remains unchanged
+    //     } catch (error) {
+    //         console.error('Error occurred during logout:', error);
+    //         Swal.fire("Error", "An error occurred during logout", "error");
+    //     }
+    // }
+    async function HandleLogOut() {
+      try {
           const { isConfirmed } = await Swal.fire({
-            title: "Do you want to logout ?",
-            showDenyButton: true,
-            confirmButtonText: "Logout",
-            denyButtonText: "Cancel",
+              title: "Do you want to logout?",
+              showDenyButton: true,
+              confirmButtonText: "Logout",
+              denyButtonText: "Cancel",
           });
-      
+  
           if (isConfirmed) {
-            const response = await axios.post(
-              'http://127.0.0.1:8000/api-auth-djoser/token/logout/', // Replace with your actual endpoint
-              {}, // Djoser might not require data in the body for logout
-              {
-                headers: { Authorization: `Token ${GlobalState.userToken}` },
+              if (GlobalState.GoogleToken) {
+                  // Clear Google-related data from localStorage
+                  localStorage.removeItem('The GoogleToken');
+                  localStorage.removeItem('The username');
+                  localStorage.removeItem('The email');
+                  localStorage.removeItem('The userId');
+                  
+                  // Dispatch action to clear Google authentication state
+                  GlobalDispatch({ type: 'logout' });
+                  Swal.fire("Google Logout successful", "", "success");
+              } else {
+                  const response = await axios.post(
+                      'http://127.0.0.1:8000/api-auth-djoser/token/logout/',
+                      {}, 
+                      {
+                          headers: { Authorization: `Token ${GlobalState.userToken}` },
+                      }
+                  );
+  
+                  if (response.status === 204 || response.status === 200) {
+                      // Clear local storage and update state for normal logout
+                      localStorage.removeItem('The username');
+                      localStorage.removeItem('The email');
+                      localStorage.removeItem('The userId');
+                      localStorage.removeItem('The userToken');
+                      
+                      // Dispatch action to clear authentication state
+                      GlobalDispatch({ type: 'logout' });
+                      Swal.fire("Logout successful", "", "success");
+                  } else {
+                      console.error('Error occurred during logout:', response.data);
+                      Swal.fire("Error", "An error occurred during logout", "error");
+                  }
               }
-            );
-      
-            if (response.status === 204 || response.status === 200) { // Handle both 204 (No Content) and 200 (OK)
-              GlobalDispatch({ type: 'logout' });
-              navigate('/');
-              Swal.fire("Logout successful", "", "success");
-            } else {
-              console.error('Error occurred during logout:', response.data);
-              Swal.fire("Error", "An error occurred during logout", "error");
-            }
           } else {
-            Swal.fire("Logout cancelled", "", "info");
+              Swal.fire("Logout cancelled", "", "info");
           }
-        } catch (error) {
+      } catch (error) {
           console.error('Error occurred during logout:', error);
           Swal.fire("Error", "An error occurred during logout", "error");
-        }
       }
-      
+  }
+  
+  
+  
       
   return (
     <AppBar sx ={{backgroundColor:'#cb23de'}} position={'static'}>
@@ -172,7 +248,7 @@ const NavBar = () => {
           </Link>
       }
 
-
+        {/* logout */}
 
           {GlobalState.userIsLogged ? 
           <Button onClick={HandleLogOut}
@@ -188,6 +264,10 @@ const NavBar = () => {
              
           </Link>
       }
+      {/* GoogleLogout */}
+    
+      
+      
 
       {/* Register */}
       

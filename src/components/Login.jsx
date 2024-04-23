@@ -7,6 +7,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import BackImg from '../assets/img1.jpg';
 import '../css/Login.css';
 import {useImmerReducer} from 'use-immer';
+import GoogleAuth from './GoogleAuth';
 
 // Context
 import DispatchContxt from '../context/DispatchContxt';
@@ -169,7 +170,7 @@ const Login = () => {
       </Button>
 
 
-
+      <GoogleAuth/>
         
       <Grid item container justifyContent='center'>
         <Typography >
