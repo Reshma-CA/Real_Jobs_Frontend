@@ -90,9 +90,6 @@ const Register = () => {
                 password: state.password,
                 re_password: state.repassword,
 
-
-
-
             },
             {cancelToken:source.token})
             console.log(response)

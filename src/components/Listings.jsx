@@ -5,12 +5,13 @@ import { MapContainer, TileLayer, useMap,Marker,Popup ,Polyline,Polygon} from 'r
 import { Icon } from "leaflet";
 // MUI
 import { Box,Grid,AppBar,Typography,Button,Card,CardHeader,CardMedia,CardContent,CircularProgress,IconButton,CardActions,} from "@mui/material";
-
+import RoomIcon from '@mui/icons-material/Room';
 // Map icons
 import  houseIconPng from '../assets/Mapicons/house.png';
 import apartmentIconPng from '../assets/Mapicons/apartment.png';
 import officeIconPng from '../assets/Mapicons/office.png';
-
+import { useNavigate } from 'react-router-dom';
+import {useImmerReducer} from 'use-immer';
 //Assets
 import Img1 from '../assets/img1.jpg'
 import { useState,useEffect } from 'react';
@@ -41,6 +42,37 @@ const Listings = () => {
 
       const [Latitude,setLatitude] = useState(8.5241)
       const [Longitude,setLongitude] = useState(76.9366)
+
+      const initialState= {
+          mapInstance:null,
+        
+    }
+
+    function ReducerFunction(draft,action){
+        switch (action.type) {
+            
+            case 'getMap':
+              draft.mapInstance = action.mapData;
+              break;
+            default:
+              break;
+
+          
+
+           
+           
+                
+        }
+}
+    const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
+    const navigate = useNavigate()
+
+
+    function TheMapcomponent(){
+        const map = useMap()
+        dispatch({type:'getMap', mapData:map})
+        return null;
+    }
 
       
       function GoEast(){
@@ -103,18 +135,19 @@ const Listings = () => {
       
 
   return (
-  <Grid container>
-    <Grid item xs={4}>
+  <Grid container >
+    <Grid item xs={4} >
       {AllListing.map((lists)=>{
         return(
           <Card key={lists.id} sx={{margin:'0.5rem',border:'1px solid black'}} style={{padding:'10xp',marginBottom:"30px"}}>
             <CardHeader
           
-            // action={
-            //   <IconButton aria-label="settings">
-            //     <MoreVertIcon />
-            //   </IconButton>
-            // }
+            action={
+              <IconButton aria-label="settings" onClick={()=>state.mapInstance.flyTo([lists.latitude,lists.longitude],16)}>
+                <RoomIcon />
+              </IconButton>
+            }
+          
             title={lists.title}
         
           />
@@ -148,21 +181,46 @@ const Listings = () => {
          </Box>
           </CardContent>
          
-          
+          <CardActions>
+          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton aria-label='add to favorites' disableRipple style={{ pointerEvents: 'none' }}>
+              <Typography variant="body1" style={{ marginRight: '8px' }}>
+                Job Publisher:
+              </Typography>
+              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                {lists.job_provider_username}
+              </Typography>
+            </IconButton>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton aria-label='share' disableRipple style={{ pointerEvents: 'none' }}>
+              <Typography variant="body1" style={{ marginRight: '8px' }}>
+                Job Publishing Date:
+              </Typography>
+              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
+                {lists.published_at_date}
+              </Typography>
+            </IconButton>
+          </div>
+        </div>
+
+
+          </CardActions>
           
         </Card>
             )
       })}
       </Grid>
       <Grid item xs={8} style={{marginTop:'0.5em'}}>
-      {/* <AppBar position='sticky'> */}
+      <AppBar position='sticky'>
           <div style={{height:"100vh"}}>
             <MapContainer center={[8.5241, 76.9366]} zoom={14} scrollWheelZoom={true}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+           <TheMapcomponent/>
           
               {AllListing.map((item)=>{
                    function iconDisplay() {
@@ -195,7 +253,7 @@ const Listings = () => {
               })}
         </MapContainer>
         </div>
-      {/* </AppBar> */}
+      </AppBar>
       </Grid>
     </Grid>
   )

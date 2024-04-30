@@ -68,66 +68,7 @@ const NavBar = () => {
         { Name: "About Us", Link: "/home"},
         
       ];
-    //   async function HandleLogOut() {
-    //     try {
-    //       const { isConfirmed } = await Swal.fire({
-    //         title: "Do you want to logout ?",
-    //         showDenyButton: true,
-    //         confirmButtonText: "Logout",
-    //         denyButtonText: "Cancel",
-    //       });
-      
-    //       if (isConfirmed) {
-    //         const response = await axios.post(
-    //           'http://127.0.0.1:8000/api-auth-djoser/token/logout/', // Replace with your actual endpoint
-    //           {}, // Djoser might not require data in the body for logout
-    //           {
-    //             headers: { Authorization: `Token ${GlobalState.userToken}` },
-    //           }
-    //         );
-      
-    //         if (response.status === 204 || response.status === 200) { // Handle both 204 (No Content) and 200 (OK)
-    //           GlobalDispatch({ type: 'logout' });
-    //           navigate('/');
-    //           Swal.fire("Logout successful", "", "success");
-    //         } else {
-    //           console.error('Error occurred during logout:', response.data);
-    //           Swal.fire("Error", "An error occurred during logout", "error");
-    //         }
-    //       } else {
-    //         Swal.fire("Logout cancelled", "", "info");
-    //       }
-    //     } catch (error) {
-    //       console.error('Error occurred during logout:', error);
-    //       Swal.fire("Error", "An error occurred during logout", "error");
-    //     }
-    //   }
-
-    //   async function GoogleLogOut() {
-    //     try {
-    //         // Check if user is logged in with Google
-    //         if (GlobalState.GoogleToken) {
-    //             // Use the provided method for Google logout
-    //             await logout(); // Use the appropriate method provided by @react-oauth/google
     
-    //             // Dispatch action to clear Google authentication state
-    //             GlobalDispatch({ type: 'googleLogout' });
-    
-    //             // Clear Google-related data from localStorage
-    //             localStorage.removeItem('The GoogleToken');
-    
-    //             // Optionally, you can navigate the user to the home page or perform other actions
-    //             navigate('/');
-    //             Swal.fire("Google Logout successful", "", "success");
-    //         }
-    
-    //         // Handle normal logout
-    //         // Code for normal logout remains unchanged
-    //     } catch (error) {
-    //         console.error('Error occurred during logout:', error);
-    //         Swal.fire("Error", "An error occurred during logout", "error");
-    //     }
-    // }
     async function HandleLogOut() {
       try {
           const { isConfirmed } = await Swal.fire({
@@ -264,7 +205,7 @@ const NavBar = () => {
              
           </Link>
       }
-      {/* GoogleLogout */}
+      
     
       
       

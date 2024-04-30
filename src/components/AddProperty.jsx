@@ -1,16 +1,31 @@
-import React, { useState,useEffect, useLayoutEffect  } from 'react';
+import React, { useState,useEffect, useRef,useMemo ,useContext} from 'react';
 import axios from "axios";
 import { Box, Avatar, Button, Grid, Paper,  Typography, InputAdornment, Input,FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link, useNavigate } from 'react-router-dom';
-import BackImg from '../assets/img1.jpg';
+
+import BackImg from '../assets/img2.jpg'; 
 import '../css/Register.css';
 import {useImmerReducer} from 'use-immer';
+import Kovalam from '../assets/Boroughs/Kovalam';
+import Karamana from '../assets/Boroughs/Karamana';
+import Nedumangad from '../assets/Boroughs/Nedumangad';
+// import Neyyatinkara from '../assets/Boroughs/Neyyatinkara';
+import Kanjiramkulam from '../assets/Boroughs/Kanjiramkulam';
+
+// Contexts
+import StateContext from '../context/StateContext';
+
+
+// import AdapterDayjs from '@mui/lab/AdapterDayjs';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
+
 //Leaflet
 
-import { MapContainer, TileLayer, useMap ,Marker,} from 'react-leaflet'
+import { MapContainer, TileLayer, useMap ,Marker, Polygon,} from 'react-leaflet'
 
 
 const AreaOptions = [
@@ -19,17 +34,87 @@ const AreaOptions = [
         label: '',
       },
       {
-        value: 'Kerala',
-        label: 'Kerala',
+        value: 'kerala',
+        label: 'kerala',
       },
     
 ]
+
+const TVMOptions = [
+    {
+        value: "Kovalam",
+        label: "Kovalam",
+    },
+    {
+        value: "Karamana", 
+        label: "Karamana",
+    },
+    {
+        value: "Nedumangad",
+        label: "Nedumangad",
+    },
+    {
+        value: "Kanjiramkulam",
+        label: "Kanjiramkulam",
+    },
+    // {
+    //     value: "Shanghumukham Beach",
+    //     label: "Shanghumukham Beach",
+    // },
+    // {
+    //     value: "Vizhinjam Lighthouse",
+    //     label: "Vizhinjam Lighthouse",
+    // },
+    // {
+    //     value: "Ponmudi",
+    //     label: "Ponmudi",
+    // },
+    // {
+    //     value: "Vellayani Lake",
+    //     label: "Vellayani Lake",
+    // },
+    // {
+    //     value: "Kuthiramalika Palace Museum",
+    //     label: "Kuthiramalika Palace Museum",
+    // },
+    // {
+    //     value: "Poovar Island",
+    //     label: "Poovar Island",
+    // },
+    // {
+    //     value: "Poovathoor",
+    //     label: "Poovathoor",
+    // },
+];
+
+const listingtypeOptions = [
+    {
+        value:'',
+        label:'',
+    },
+    {
+        value:'Apartment',
+        label:'Apartment',
+    },
+    {
+        value:'House',
+        label:'House',
+    },
+    {
+        value:'Office',
+        label:'Office',
+    },
+
+]
 const AddProperty = () => {
+
+    const GlobalState = useContext(StateContext)
 
     
     const initialState= {
         titleValue:'',
         listingTypeValue:'',
+        jobPublishedValue:'',
         descriptionValue:'',
         areaValue:'',
         boroughValue:'',
@@ -42,11 +127,16 @@ const AddProperty = () => {
         pricture4Value:'',
         pricture5Value:'',
         mapInstance:null,
-
-
-      
-
-        
+        markerPosition:{
+            lat:'8.5241',
+            lng:'76.9366'
+        }, 
+        uploadedPictures:[], 
+        sendRequest:0,
+        userProfile:{
+            agencyName:'',
+            phoneNumber:'',
+        }  
     }
 
     function ReducerFunction(draft,action){
@@ -61,7 +151,8 @@ const AddProperty = () => {
                     
             case 'catchDescriptionValueChange':
                 draft.descriptionValue = action.descriptionChosen;
-                break;  
+                break; 
+                
 
             case 'catchAreaValueChange':
                 draft.areaValue = action.areaValueChosen;
@@ -74,7 +165,7 @@ const AddProperty = () => {
             case 'catchLatitudeValueChange':
                 draft.latitudeValue = action.latitudeValueChosen;
                 break;
-
+                
             case 'catchLongitudeValueChange':
                 draft.longitudeValue = action.longitudeValueChosen;
                 break;
@@ -107,31 +198,35 @@ const AddProperty = () => {
                 draft.mapInstance = action.mapData;
                 break;
 
+            case 'changeMarkerposition':
+                draft.markerPosition.lat = action.changeLatitude;
+                draft.markerPosition.lng = action.changeLongitude;
+                draft.latitudeValue = ''
+                draft.longitudeValue= ''
+                break;
+            
+
+            case 'catchUploadedPictures':
+                draft.uploadedPictures = action.picturesChosen;
+                break;
+
+            case 'changeSendRequest':
+                draft.sendRequest = draft.sendRequest+1
+                break;
+
+            // case 'changepublishedDate':
+            //     draft.jobPublishedValue = action.jobpublishedChosen;
+            //     break;
+
+          
+
            
            
                 
         }
 }
     const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
-
-    // Draggable marker
-
-    // const [position, setPosition] = useState(center)
-    // const markerRef = useRef(null)
-    // const eventHandlers = useMemo(
-    //   () => ({
-    //     dragend() {
-    //       const marker = markerRef.current
-    //       if (marker != null) {
-    //         setPosition(marker.getLatLng())
-    //       }
-    //     },
-    //   }),
-    //   [],
-    // )
-    // const toggleDraggable = useCallback(() => {
-    //   setDraggable((d) => !d)
-    // }, [])
+    const navigate = useNavigate()
 
 
     function TheMapcomponent(){
@@ -142,24 +237,153 @@ const AddProperty = () => {
 
     // Use Effect to change the map view depending on chosen borough
     useEffect(()=>{
-        if(state.boroughValue === 'Kaniyapuram'){
-            state.mapInstance.setView([8.585878830425447, 76.85187976830409],12)
+        if(state.boroughValue === 'Kovalam'){
+            state.mapInstance.setView([8.399845986344863, 76.98308472374298],13)
+            dispatch({type:'changeMarkerposition',changeLatitude:8.399845986344863,changeLongitude:76.98308472374298})
         }
-        else if(state.boroughValue === 'Menamkulam'){
-            state.mapInstance.setView([8.571620604327292, 76.85531299595218],12)
+        else if(state.boroughValue === 'Karamana'){
+            state.mapInstance.setView([8.482109045600668, 76.9661929115117],13)
+            dispatch({type:'changeMarkerposition',changeLatitude:8.482109045600668,changeLongitude:76.9661929115117})
+        }
+        else if(state.boroughValue === 'Nedumangad'){
+            state.mapInstance.setView([8.612719832912235, 76.99735717160095],15)
+            dispatch({type:'changeMarkerposition',changeLatitude:8.612719832912235,changeLongitude:76.99735717160095})
+        }
+        else if(state.boroughValue === 'Kanjiramkulam'){
+            state.mapInstance.setView([8.360465475683004, 77.05244061054387],15)
+            dispatch({type:'changeMarkerposition',changeLatitude:8.360465475683004,changeLongitude:77.05244061054387})
         }
 
     },[state.boroughValue])
 
+    // Borough dispaly function
+
+    function BoroughDisplay(){
+        if(state.boroughValue === 'Kovalam'){
+            return <Polygon positions={Kovalam}/>
+        }
+        else if(state.boroughValue === 'Karamana'){
+            return <Polygon positions={Karamana}/>
+
+        }
+        else if(state.boroughValue === 'Nedumangad'){
+            return <Polygon positions={Nedumangad}/>
+
+        }
+        else if(state.boroughValue === 'Kanjiramkulam'){
+            return <Polygon positions={Kanjiramkulam}/>
+
+        }
+    }
+
+    // Draggable marker
+
+    
+    const markerRef = useRef(null)
+    const eventHandlers = useMemo(
+        () => ({
+        dragend() {
+            const marker = markerRef.current;
+            dispatch({type:'catchLatitudeValueChange', latitudeValueChosen: marker.getLatLng().lat}); // Corrected action type
+            dispatch({type:'catchLongitudeValueChange', longitudeValueChosen: marker.getLatLng().lng});
+           
+        },
+        }),
+        [],
+    );
+    
+    // catching picture fields
+
+    useEffect(()=>{
+        if(state.uploadedPictures[0]){
+            dispatch({type:'catchPricture1ValueChange',pricture1ValueChosen:state.uploadedPictures[0]})
+        }
+
+    },[state.uploadedPictures[0]])
+      
+    useEffect(()=>{
+        if(state.uploadedPictures[1]){
+            dispatch({type:'catchPricture2ValueChange',pricture2ValueChosen:state.uploadedPictures[1]})
+        }
+
+    },[state.uploadedPictures[1]])
+
+    useEffect(()=>{
+        if(state.uploadedPictures[2]){
+            dispatch({type:'catchPricture3ValueChange',pricture3ValueChosen:state.uploadedPictures[2]})
+        }
+
+    },[state.uploadedPictures[2]])
+
+    useEffect(()=>{
+        if(state.uploadedPictures[3]){
+            dispatch({type:'catchPricture4ValueChange',pricture4ValueChosen:state.uploadedPictures[3]})
+        }
+
+    },[state.uploadedPictures[3]])
+
+    useEffect(()=>{
+        if(state.uploadedPictures[4]){
+            dispatch({type:'catchPricture5ValueChange',pricture5ValueChosen:state.uploadedPictures[4]})
+        }
+
+    },[state.uploadedPictures[4]])
+
+    // request to get profile info
+    useEffect(()=>{
+        async function getProfileInfo(){
+            try{
+                const response = await axios.get(`http://127.0.0.1:8000/api/profiles/${GlobalState.userId}/`)
+                console.log(response.data)
+                dispatch({type:'catchProfileInfo',profileObject:response.data})
+            }
+            catch(e){
+                console.log(e.response)
+            }
+        }
+        getProfileInfo()
+    },[])
+
     const Addjobhandle = (e) => {
         e.preventDefault();
         console.log('the form has been submitted')
-        // dispatch({type:'changeSendRequest'})
+        dispatch({type:'changeSendRequest'})
     }
 
+    useEffect(() => {
+        if (state.sendRequest) {
+            async function AddProperty() {
+                const formData = new FormData();
+                formData.append('title', state.titleValue);
+                formData.append('description', state.descriptionValue);
+                formData.append('area', state.areaValue);
+                formData.append('borough', state.boroughValue); // corrected field name
+                formData.append('listing_type', state.listingTypeValue);
+                formData.append('price', state.priceValue);
+                formData.append('latitude', state.latitudeValue);
+                formData.append('longitude', state.longitudeValue);
+                formData.append('picture1', state.pricture1Value);
+                formData.append('picture2', state.pricture2Value);
+                formData.append('picture3', state.pricture3Value);
+                formData.append('picture4', state.pricture4Value);
+                formData.append('picture5', state.pricture5Value);
+                formData.append('job_provider', GlobalState.userId);
+    
+                try {
+                    const response = await axios.post('http://127.0.0.1:8000/api/Listing/create/', formData); // pass formData here
+                    console.log(response.data);
+                    navigate('/listings')
+                } catch (e) {
+                    console.log(e.response);
+                }
+            }
+            AddProperty();
+        }
+    }, [state.sendRequest, GlobalState.userId]); // Include GlobalState.userId as dependency
+    
     const paperStyle = {
         padding: 20,
-        height: '160vh',
+        height: '220vh',
         width: '120%', // or specify a specific width like '500px'
         margin: '20px auto',
     };
@@ -184,13 +408,38 @@ const AddProperty = () => {
                     <TextField label='Job Title' id='title' placeholder='enter job title' variant='standard' style={btstyle} fullWidth required  value={state.titleValue} onChange={(e)=>dispatch({type:'catchTitleChange',titleChosen:e.target.value})}/>                    
                     </Grid>  
 
-                    <Grid item container style={{marginTop:'1rem'}}>
-                    <TextField label='Type of building' id='listing_type' placeholder='enter Type of building' variant='standard' style={btstyle} fullWidth required  value={state.listingTypeValue} onChange={(e)=>dispatch({type:'catchListingTypeChange',listingTypeChosen:e.target.value})}/>                    
-                    </Grid>       
+                   
+                    <Grid item container justifyContent='space-between' >
+                    <Grid item xs={5} style={{ marginTop: '1rem' }}>
+                        <FormControl fullWidth required>
+                            <InputLabel id="Type of building">Type of building</InputLabel>
+                            <Select
+                                variant='standard'
+                                id="listing_type"
+                                value={state.listingTypeValue}
+                                onChange={(e)=>dispatch({type:'catchListingTypeChange',listingTypeChosen:e.target.value})}
+                            >
+                                {listingtypeOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item container xs={5} style={{marginTop:'1rem'}}>
+                    <TextField label='Payment Amount per day' id='price' type="number" placeholder='enter price' variant='standard' style={btstyle} fullWidth required  value={state.priceValue} onChange={(e)=>dispatch({type:'catchPriceValueChange',priceValueChosen:e.target.value})}/>                    
+                    </Grid> 
+                    </Grid>
                     
                     <Grid item container style={{marginTop:'1rem'}}>
-                    <TextField label='Description' id='description' placeholder='enter Description' variant='standard' style={btstyle} fullWidth required  value={state.descriptionValue} onChange={(e)=>dispatch({type:'catchDescriptionValueChange',descriptionChosen:e.target.value})}/>                    
+                    <TextField label='Job Description' id='description' placeholder='enter Description' variant='outlined' 
+                    multiline rows={6}
+                    style={btstyle} fullWidth required  value={state.descriptionValue} onChange={(e)=>dispatch({type:'catchDescriptionValueChange',descriptionChosen:e.target.value})}/>                    
                     </Grid> 
+
+                    
 
                     <Grid item container justifyContent='space-between' >
                     <Grid item xs={5} style={{ marginTop: '1rem' }}>
@@ -210,10 +459,25 @@ const AddProperty = () => {
                             </Select>
                         </FormControl>
                     </Grid>
+                    
 
-                    <Grid item xs={5} style={{marginTop:'1rem'}}>
-                    <TextField label='Borough' id='borough' placeholder='enter borough' variant='standard' style={btstyle} fullWidth required  value={state.boroughValue} onChange={(e)=>dispatch({type:'catchBoroughValueChange',boroughValueChosen:e.target.value})}/>                    
-                    </Grid> 
+                        <Grid item xs={5} style={{ marginTop: '1rem' }}>
+                        <FormControl fullWidth required>
+                            <InputLabel id="borough">Landmark</InputLabel>
+                            <Select
+                                variant='standard'
+                                id="borough"
+                                value={state.boroughValue}
+                                onChange={(e)=>dispatch({type:'catchBoroughValueChange',boroughValueChosen:e.target.value})}
+                            >
+                                {state.areaValue === 'kerala' ? TVMOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                    )):""}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     </Grid>
                     {/* map */}
 
@@ -224,14 +488,20 @@ const AddProperty = () => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                    <TheMapcomponent/>
+                   {BoroughDisplay()}
 
-                   {/* <Marker
-                    draggable={draggable}
+                   <Marker
+                    draggable
                     eventHandlers={eventHandlers}
-                    position={position}
+                    position={state.markerPosition}
                     ref={markerRef}>
-                    
-                    </Marker> */}
+                   
+                    </Marker>
+
+                   
+
+                   {/* </Polygon> */}
+
                     </MapContainer>
 
 
@@ -239,16 +509,34 @@ const AddProperty = () => {
 
                  {/* map */}
 
-                    <Grid item container style={{marginTop:'1rem'}}>
-                    <TextField label='price' id='price' placeholder='enter price' variant='standard' style={btstyle} fullWidth required  value={state.priceValue} onChange={(e)=>dispatch({type:'catchPriceValueChange',priceValueChosen:e.target.value})}/>                    
-                    </Grid> 
+                    
 
                     
 
                     
                    
+                     <Button variant="contained" component="label"  sx={{marginBottom:'15px'}} style={{ btstyle, backgroundColor: '#eb2f77', }} 
+                     fullWidth >UPLOAD PICTURES (MAX 5)
+                    <input type="file" multiple accept='image/png, image/gif,image/jpeg' hidden
+                    onChange={(e)=>dispatch({type:'catchUploadedPictures',picturesChosen:e.target.files,})}
+                    />
+                    </Button> 
+                    
+                    <Grid item container>
+                        <ul>
+                        {state.pricture1Value ?<li>{state.pricture1Value.name}</li>:''}
+                        {state.pricture2Value ?<li>{state.pricture2Value.name}</li>:''}
+                        {state.pricture3Value ?<li>{state.pricture3Value.name}</li>:''}
+                        {state.pricture4Value ?<li>{state.pricture4Value.name}</li>:''}
+                        {state.pricture5Value ?<li>{state.pricture5Value.name}</li>:''}
+                        </ul>
+
+                    </Grid>
+                    
+
+
                     <Button variant="contained" type='Submit' style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }} fullWidth onClick={Addjobhandle}>Submit </Button>
-                    <Button onClick={()=>state.mapInstance.flyTo([8.5241, 76.9366],15)}>Map test BUTTON</Button>
+                    <Button onClick={()=> console.log(state.uploadedPictures)}>Map test BUTTON</Button>
                 </Paper>
             </Grid>
         </Grid>
