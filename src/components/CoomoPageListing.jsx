@@ -80,6 +80,7 @@ const CoomoPageListing = () => {
               component="img"
               height="200"
               image={lists.picture1}
+              // blogHref={`/Listdetails/${post.id}`}
               alt={lists.title}
             />
              <Box sx={{ marginBottom: '0.5rem'}}>
@@ -125,7 +126,7 @@ const CoomoPageListing = () => {
 
                 </CardActions>
           
-            <Link to='/listings'><Button className="glitter"
+            <Link to={`/listings/${lists.id}`}><Button className="glitter"
             variant='contained'
             sx={{
               mt: 2,

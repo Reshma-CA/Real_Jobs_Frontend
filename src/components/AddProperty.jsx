@@ -1,14 +1,17 @@
 import React, { useState,useEffect, useRef,useMemo ,useContext} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import {useImmerReducer} from 'use-immer';
+
 import { Box, Avatar, Button, Grid, Paper,  Typography, InputAdornment, Input,FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Link, useNavigate } from 'react-router-dom';
+
 
 import BackImg from '../assets/img2.jpg'; 
 import '../css/Register.css';
-import {useImmerReducer} from 'use-immer';
+
 import Kovalam from '../assets/Boroughs/Kovalam';
 import Karamana from '../assets/Boroughs/Karamana';
 import Nedumangad from '../assets/Boroughs/Nedumangad';
@@ -214,10 +217,11 @@ const AddProperty = () => {
                 draft.sendRequest = draft.sendRequest+1
                 break;
 
-            // case 'changepublishedDate':
-            //     draft.jobPublishedValue = action.jobpublishedChosen;
-            //     break;
-
+            case 'catchProfileInfo':
+                draft.userProfile.agencyName = action.profileObject.agency_name;
+                draft.userProfile.phoneNumber= action.profileObject.phone_number;
+                break;
+                
           
 
            
@@ -274,6 +278,34 @@ const AddProperty = () => {
             return <Polygon positions={Kanjiramkulam}/>
 
         }
+    }
+
+    function submitButtonDisplay(){
+        if(GlobalState.userIsLogged && state.userProfile.agencyName !== null && state.userProfile.agencyName !== ''&& 
+        state.userProfile.phoneNumber !== null && state.userProfile.phoneNumber !== ''){
+            return (
+                <Button variant="contained" type='Submit' 
+                style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }}
+                 fullWidth onClick={Addjobhandle}>Submit </Button>
+            )
+
+        }else if(GlobalState.userIsLogged && (
+            state.userProfile.agencyName === null || state.userProfile.agencyName === ''|| 
+            state.userProfile.phoneNumber === null || state.userProfile.phoneNumber === '')){
+            return (
+                <Button variant="outlined" 
+                style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }}
+                 fullWidth onClick={()=>navigate('/profile')}>Complete your profile to add property </Button>
+            )}
+            else if(!GlobalState.userIsLogged ){
+                return (
+                    <Button variant="outlined" 
+                    style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }}
+                     fullWidth onClick={()=>navigate('/login')}>Login to add property </Button>
+                )}
+
+
+
     }
 
     // Draggable marker
@@ -383,7 +415,7 @@ const AddProperty = () => {
     
     const paperStyle = {
         padding: 20,
-        height: '220vh',
+        height: '180vh',
         width: '120%', // or specify a specific width like '500px'
         margin: '20px auto',
     };
@@ -535,8 +567,8 @@ const AddProperty = () => {
                     
 
 
-                    <Button variant="contained" type='Submit' style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }} fullWidth onClick={Addjobhandle}>Submit </Button>
-                    <Button onClick={()=> console.log(state.uploadedPictures)}>Map test BUTTON</Button>
+                   {submitButtonDisplay()}
+                    {/* <Button onClick={()=> console.log(state.uploadedPictures)}>Map test BUTTON</Button> */}
                 </Paper>
             </Grid>
         </Grid>

@@ -62,10 +62,10 @@ const NavBar = () => {
       })
       
       const MenuItems = [
-        { Name: "Job Listings", Link: "/listings" },
+        { Name: "Job Listings", Link: "/comon" },
         { Name: "Job Vacancy", Link: "/home" },
         { Name: "Add Jobs", Link: "/addproperty" },
-        { Name: "About Us", Link: "/home"},
+        { Name: "About Us", Link: "/aboutus"},
         
       ];
     
@@ -121,6 +121,10 @@ const NavBar = () => {
           Swal.fire("Error", "An error occurred during logout", "error");
       }
   }
+
+  const handleClick = () => {
+    navigate('/');
+  }
   
   
   
@@ -158,7 +162,9 @@ const NavBar = () => {
 
            
         <WorkIcon sx={{ display: { xs: "none", sm: "none", md: "flex" } }}/>
-        <Typography   style={{ fontWeight: 'bold' ,fontSize: '1.3rem',}}> REALJOBS</Typography>
+        <Typography   style={{ fontWeight: 'bold' ,fontSize: '1.3rem',cursor: 'pointer' }} onClick={handleClick}> REALJOBS</Typography> 
+             
+            
          </StyledBox >
         
         <MenuBox  sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
@@ -171,12 +177,12 @@ const NavBar = () => {
 
         <AuthBox>
           {GlobalState.userIsLogged ? 
-          <Button 
+          <Link to='/profile'><Button 
        
         sx={{ cursor: 'pointer', backgroundColor: '#55c98d', color: '#faf5f9', fontSize: '15px', fontWeight: 'bold' }}>
               
-             Hi, {GlobalState.userUserName}
-          </Button>
+             Hi, {GlobalState.userUserName} 
+          </Button></Link>
 
           
 

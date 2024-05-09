@@ -12,6 +12,9 @@ import Register from './components/Register'
 import Login from './components/Login'
 import Testing from './components/Testing'
 import AddProperty from './components/AddProperty'
+import Profile from './components/Profile'
+import AboutUs from './components/AboutUs'
+import CoomoPageListing from './components/CoomoPageListing'
 // Google
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -26,42 +29,7 @@ function App() {
 
   const clientId = "647214474363-tald3t4u32m20fgnaijibpvv9n08sgbr.apps.googleusercontent.com"
 
-  // const[userInfo,setUserInfo]=useState([])
-
-  // const VerifyToken =()=>{
-  //   const access_key = localStorage.getItem("access_token");
-  //   const username = localStorage.getItem("username");
-  //   const email = localStorage.getItem("email");
-  //   const id = localStorage.getItem("id");
-
-  //   fetch("http://127.0.0.1:8000/listing/token/verify/", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ token: access_key }),
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       setUserInfo({
-  //         ...userInfo,
-  //         access_token: access_key,
-  //         username: username,
-  //         email:email,
-  //         id:id,
-  //       });
-  //     } else {
-  //       setUserInfo({ ...userInfo, access_token: null, username: null ,email:null,id:null});
-  //     }
-  //   });
-  // }
-
- 
- 
-  // useEffect(() => {
-  //   VerifyToken();
-  // }, []);
-
-  // End of Google verification
+  
 
   const initialState= {
     userUserName: localStorage.getItem('The username'),
@@ -135,11 +103,14 @@ function ReducerFunction(draft,action){
      {/* Routes */}
      <Routes>
           <Route path="/" element={<Hero />} />
-          <Route path="/listings" element={<Listings />} />
+          <Route path="/listings/:id" element={<Listings />} />
+          <Route path="/comon" element={<CoomoPageListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/addproperty" element={<AddProperty />} />
           <Route path="/testing" element={<Testing />} />
+          <Route path="/aboutus" element={<AboutUs />} />
 
           <Route path="/test" element={<Test />} />
           <Route path="/home" element={<Home />} />

@@ -1,4 +1,4 @@
-import {Box, Avatar, Button, Grid, Paper, TextField, Typography , InputAdornment,Input} from '@mui/material'
+import {Box, Avatar, Button, Grid, Paper, TextField, Typography , InputAdornment,Input,Icon} from '@mui/material'
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 
 import React, { useState ,useEffect,useContext} from 'react'
@@ -16,8 +16,7 @@ import StateContext from '../context/StateContext';
 
 const Login = () => {
 
-    const [name,setName] = useState("");
-    const [password,setpassword] = useState("");
+
 
     const navigate = useNavigate()
 
@@ -137,7 +136,7 @@ const Login = () => {
         }
     }, [state.token]);
     
- 
+   
 
   const gridContainerStyle = {
     backgroundImage: `url(${BackImg})`,
