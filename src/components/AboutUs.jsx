@@ -2,6 +2,8 @@ import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import HomeImg from '../assets/image14.jpg';
 import { useState,useEffect } from 'react';
+import NavBar from '../layouts/NavBar';
+import Footer from '../layouts/Footer';
 
 const AboutUs = () => {
   
@@ -10,6 +12,7 @@ const AboutUs = () => {
 
   return (
     <Box>
+      <NavBar/>
       
       <Typography align='center' variant='h4' sx={{ fontWeight: 800 }}> About <span style={{ color: 'red' }}>us</span> </Typography>
       <Typography align='center' variant='h6' sx={{ fontWeight: 'bold', color: '#bd0886' }}> "Ready for a New Job? Start Your Search Here!"</Typography>
@@ -40,28 +43,10 @@ const AboutUs = () => {
           solutions for the healthcare industry. With a focus on innovation and quality, 
           we strive to empower healthcare providers with advanced technology to improve job care and streamline operations.
           </Typography>
-          {/* <Button className="glitter"
-            variant='contained'
-            sx={{
-              mt: 2,
-              mb: 4,
-              width: '100%',
-              backgroundColor: '#e15cf2',
-              color: '#1a1819',
-              fontSize: '15px',
-              fontWeight: 'bold',
-              '&:hover': {
-                backgroundColor: '#7d1c7d',
-              },
-            }}
-          >
-            Find Jobs Here!
-          </Button> */}
-          {/* <Typography variant='body1' pb={2}>
-            Browse Our Latest Job Listings!
-          </Typography> */}
+          
         </Box>
       </Box>
+      <Footer/>
     </Box>
   );
 };

@@ -63,12 +63,13 @@ const NavBar = () => {
       
       const MenuItems = [
         { Name: "Job Listings", Link: "/comon" },
-        { Name: "Job Vacancy", Link: "/home" },
+        { Name: "Job Vacancy", Link: "/agency" },
         { Name: "Add Jobs", Link: "/addproperty" },
         { Name: "About Us", Link: "/aboutus"},
         
       ];
     
+     
     async function HandleLogOut() {
       try {
           const { isConfirmed } = await Swal.fire({

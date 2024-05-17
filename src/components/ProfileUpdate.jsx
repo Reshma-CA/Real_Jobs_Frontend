@@ -96,7 +96,6 @@ const ProfileUpdate = (props) => {
               formData.append('agency_name', state.agencyNameValue);
               formData.append('phone_number', state.PhoneNumberValue);
               formData.append('bio', state.bioValue);
-            //   formData.append('profile_picture', state.pricture1Value);
               formData.append('profile_picture', state.uploadedPictures[0]); // Include profile picture
               formData.append('job_provider', GlobalState.userId);
              
@@ -125,23 +124,7 @@ const ProfileUpdate = (props) => {
         const avatarStyle = {backgroundColor:'#9d13bf'}
         const btstyle= {margin:'8px 0'}
 
-        
-    // function profilePictureDisplay(){
-    //     if(typeof state.uploadedPictures !== 'string'){
-    //         return(
-    //             <ul>
-    //             {state.uploadedPictures ?<li>{state.uploadedPictures[0].name}</li>:''}
-                    
-    //             </ul>
-    //         )}else if(typeof state.uploadedPictures === 'string'){
-    //             return(
-    //                 <Grid item style={{marginTop:'0.5rem',marginRight:'auto',marginLeft:'auto'}}>
-    //                     <img src={props.userProfile.profilePic} style={{height:'5rem',width:'5rem'}}/>
-    //                 </Grid>
-    //             )
 
-    //         }
-    // }
 
     function profilePictureDisplay() {
         if (typeof state.uploadedPictures !== 'string') {
@@ -183,7 +166,7 @@ const ProfileUpdate = (props) => {
       </Grid>    
 
       <Grid item container style={{marginTop:'1rem'}}>      
-      <TextField label='Bio' id='bio' placeholder='enter phone Number'
+      <TextField label='Bio' id='bio' placeholder='enter phone bio'
       multiline
       rows={6}
         style={btstyle} fullWidth required value={state.bioValue}

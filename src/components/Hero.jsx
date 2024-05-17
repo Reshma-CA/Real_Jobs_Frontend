@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
+import NavBar from '../layouts/NavBar';
 import HomeImg from '../assets/HomeImg.jpg';
 import { useState,useEffect } from 'react';
+import Footer from '../layouts/Footer';
 
 const Hero = () => {
   
@@ -9,7 +11,9 @@ const Hero = () => {
   
 
   return (
+   
     <Box>
+       <NavBar/>
       
       <Typography align='center' variant='h4' sx={{ fontWeight: 800 }}> Accelerate Your <span style={{ color: 'red' }}>Job Search</span> Today!</Typography>
       <Typography align='center' variant='h6' sx={{ fontWeight: 'bold', color: '#bd0886' }}> "Ready for a New Job? Start Your Search Here!"</Typography>
@@ -60,6 +64,7 @@ const Hero = () => {
           </Typography>
         </Box>
       </Box>
+      <Footer/>
     </Box>
   );
 };

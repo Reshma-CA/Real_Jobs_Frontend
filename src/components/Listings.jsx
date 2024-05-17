@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import NavBar from '../layouts/NavBar';
 import { useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'; // Import useMap hook
 import { Icon } from 'leaflet';
@@ -26,6 +27,7 @@ import {useImmerReducer} from 'use-immer';
 import DispatchContxt from '../context/DispatchContxt';
 
 import { REACT_APP_API_URL } from './Api_Constant';
+import Footer from '../layouts/Footer';
 
 const Listings = () => {
   const [allListings, setAllListings] = useState([]);
@@ -111,7 +113,9 @@ function TheMapcomponent(){
 
 
   return (
+    <div>
     <Grid container>
+       <NavBar/>
       <Grid item xs={4}>
         {/* Render each listing individually */}
         <Card sx={{ margin: '0.5rem', border: '1px solid black' }}>
@@ -216,7 +220,9 @@ function TheMapcomponent(){
           </div>
         </AppBar>
       </Grid>
+     
     </Grid>
+     <Footer/></div>
   );
 };
 

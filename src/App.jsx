@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import NavBar from './layouts/NavBar'
 import {BrowserRouter as Router ,Route,Routes} from 'react-router-dom'
 import './App.css'
+
+import { ToastContainer } from 'react-toastify';
 import { useImmerReducer } from 'use-immer'
 import Hero from './components/Hero'
 import Footer from './layouts/Footer'
@@ -10,11 +12,28 @@ import Home from './components/Home'
 import Test from './components/Test'
 import Register from './components/Register'
 import Login from './components/Login'
-import Testing from './components/Testing'
+// import Testing from './components/Testing'
 import AddProperty from './components/AddProperty'
 import Profile from './components/Profile'
 import AboutUs from './components/AboutUs'
 import CoomoPageListing from './components/CoomoPageListing'
+import Agencies from './components/Agencies'
+import AgencyDetail from './components/AgencyDetail'
+
+// Admin 
+
+import Admin_Login from './components/Admin_pannel/Admin_Login'
+import Dashboard from './components/Admin_pannel/Dashboard'
+import Admin_Navbar from './components/Admin_pannel/Admin_Navbar'
+import Admin_User from './components/Admin_pannel/user/Admin_User'
+import Edit_User from './components/Admin_pannel/user/Edit_User'
+
+import Profile_user from './components/Admin_pannel/Profile_Details/Profile_user'
+import Job_user from './components/Admin_pannel/jobs/Job_user'
+// import Admin_User from './components/Admin_pannel/Admin_User'
+// import Edit_User from './components/Admin_pannel/Edit_User'
+// import User_Add from './components/Admin_pannel/User_Add'
+
 // Google
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -94,12 +113,13 @@ function ReducerFunction(draft,action){
     <>
     <StateContext.Provider value = {state}>
     <DispatchContxt.Provider value={dispatch}>
-      {/* <googleuserContext.Provider value={userInfo}> */}
+
     <Router>
     <GoogleOAuthProvider clientId = {clientId}>
-     <NavBar/>
+    <ToastContainer /> {/* Render ToastContainer here */}
+     {/* <NavBar/> */}
      
-     
+    
      {/* Routes */}
      <Routes>
           <Route path="/" element={<Hero />} />
@@ -109,16 +129,31 @@ function ReducerFunction(draft,action){
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/addproperty" element={<AddProperty />} />
-          <Route path="/testing" element={<Testing />} />
+          <Route path="/agency" element={<Agencies />} />
+          <Route path="/agencydetail/:id" element={< AgencyDetail />} />
+          {/* <Route path="/testing" element={<Testing />} /> */}
           <Route path="/aboutus" element={<AboutUs />} />
 
           <Route path="/test" element={<Test />} />
           <Route path="/home" element={<Home />} />
+
+           {/* Admin Routes */}
+
+       <Route path="/user" element={<Admin_User/>} />
+      
+       <Route path="/edit/:id" element={<Edit_User />} />
+
+       
+       <Route path="/alogin" element={<Admin_Login/>} /> 
+        <Route path="/dash" element={<Dashboard/>} /> 
+
+        <Route path="/profile_user" element={<Profile_user/>} /> 
+        <Route path="/job_user" element={<Job_user/>} /> 
         </Routes>
-        <Footer/>
+        {/* <Footer/> */}
         </GoogleOAuthProvider>
      </Router>
-     {/* </googleuserContext.Provider> */}
+    
      </DispatchContxt.Provider>
      </StateContext.Provider>
     </>

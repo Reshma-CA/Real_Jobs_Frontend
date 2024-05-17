@@ -8,6 +8,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import BackImg from '../assets/img1.jpg';
 import '../css/Register.css';
 import {useImmerReducer} from 'use-immer';
+import NavBar from '../layouts/NavBar';
+import Footer from '../layouts/Footer';
 
 
 
@@ -108,6 +110,8 @@ const Register = () => {
        }, [state.sendRequest])
 
     return (
+        <div>
+            <NavBar/>
         <Grid container justifyContent="center" alignItems="center" sx={gridContainerStyle}>
             <Grid item xs={12} sm={8} md={6} lg={4}>
                 <Paper elevation={10} style={paperStyle} sx={{ backgroundColor: '#f4e6fa' }}>
@@ -118,7 +122,7 @@ const Register = () => {
                     <TextField label='Username' id='username' placeholder='enter username' style={btstyle} fullWidth required value={state.usernameValue} onChange={(e)=>dispatch({type:'catchUsernameChange',usernameChosen:e.target.value})} />                    
                     <TextField label='email' id='email' placeholder='enter email' style={btstyle} fullWidth required value={state.email} onChange={(e)=>dispatch({type:'catchUseremailChange',emailChosen:e.target.value})} />
                     <TextField label='password' id='password' placeholder='enter password' type='password' style={btstyle} fullWidth required value={state.password} onChange={(e)=>dispatch({type:'catchUserpasswordChange',passwordChosen:e.target.value})} />
-                    <TextField label='Confirm password' id='password2' placeholder='enter password' type='password' style={btstyle} fullWidth required  value={state.repassword} onChange={(e)=>dispatch({type:'catchUserrepasswordChange',repasswordChosen:e.target.value})}/>
+                    <TextField label='Confirm password' id='password2' placeholder='enter Confirm password' type='password' style={btstyle} fullWidth required  value={state.repassword} onChange={(e)=>dispatch({type:'catchUserrepasswordChange',repasswordChosen:e.target.value})}/>
                     <Button variant="contained" type='Submit' style={{ btstyle, backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }} fullWidth onClick={Registerhandle}>Sign Up</Button>
                     <Grid item container justifyContent='center'>
                         <Typography >
@@ -129,6 +133,8 @@ const Register = () => {
                 </Paper>
             </Grid>
         </Grid>
+        <Footer/>
+        </div>
     );
 }
 

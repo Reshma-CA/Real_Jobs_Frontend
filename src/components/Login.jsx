@@ -12,6 +12,8 @@ import GoogleAuth from './GoogleAuth';
 // Context
 import DispatchContxt from '../context/DispatchContxt';
 import StateContext from '../context/StateContext';
+import NavBar from '../layouts/NavBar';
+import Footer from '../layouts/Footer';
 
 
 const Login = () => {
@@ -148,7 +150,10 @@ const Login = () => {
     const avatarStyle = {backgroundColor:'#9d13bf'}
     const btstyle= {margin:'8px 0'}
   return (
+    <div>
+      <NavBar/>
     <Grid container justifyContent="center" alignItems="center" sx={gridContainerStyle}>
+      
     <Grid item xs={12} sm={8} md={6} lg={4}>
     <Paper elevation={10} style={paperStyle} sx={{ backgroundColor: '#f4e6fa' }}>
       <Grid align='center'>
@@ -182,6 +187,8 @@ const Login = () => {
     </Paper>
 </Grid>
 </Grid>
+<Footer/>
+</div>
   )
 }
 

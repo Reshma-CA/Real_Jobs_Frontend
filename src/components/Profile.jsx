@@ -25,6 +25,7 @@ const Profile = () => {
         bio:'',
         },
         dataIsLodding:true,
+        job_providerListings:[],
       
     }
 
@@ -36,6 +37,7 @@ const Profile = () => {
                 draft.userProfile.phoneNumber= action.profileObject.phone_number;
                 draft.userProfile.profilePic = action.profileObject.profile_picture;
                 draft.userProfile.bio = action.profileObject.bio;
+                draft.userProfile.job_providerListings = action.profileObject.job_provider_listings
                 break;
 
             case 'loadingDone' :
@@ -95,6 +97,17 @@ const Profile = () => {
         const avatarStyle = {backgroundColor:'#9d13bf'}
         const btstyle= {margin:'8px 0'}
 
+        function PropertyDisplay() {
+            const vacancyCount = state.job_providerListings.length;
+        
+            if (vacancyCount === 0) {
+                return <Button disabled size="small">No Vacancy listed</Button>;
+            } else if (vacancyCount === 1) {
+                return <Button size="small">One Vacancy listed</Button>;
+            } else {
+                return <Button size="small">{vacancyCount} vacancies listed</Button>;
+            }
+        }
         function WelcomeDisplay() {
             if (
                 state.userProfile.agencyName === null ||
@@ -122,7 +135,7 @@ const Profile = () => {
                             </Grid>
                             <Grid item>
                                 <Typography variant='h5' style={{textAlign:'center',marginTop:'1rem'}}>
-                                    You have x number of jobs       
+                                    You have {PropertyDisplay()}      
                                 </Typography>
                             </Grid>
                         </Grid>

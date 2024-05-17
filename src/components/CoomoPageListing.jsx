@@ -3,9 +3,11 @@ import React from 'react';
 import axios from "axios";
 import { Grid, Card,Box, CardHeader, CardMedia, CardContent, CircularProgress, IconButton, Typography, Button ,CardActions,Pagination,Stack} from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../layouts/NavBar';
 import { useImmerReducer } from 'use-immer';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Footer from '../layouts/Footer';
 
 const CoomoPageListing = () => {
   const initialState = {
@@ -34,7 +36,7 @@ const CoomoPageListing = () => {
   const itemsPerPage = 8; // Number of items per page
 
   
- 
+ // get all list data
 
   React.useEffect(() => {
     const source = axios.CancelToken.source();
@@ -71,7 +73,9 @@ const CoomoPageListing = () => {
   }
 
   return (
+    <div>
     <Grid container spacing={2}  >
+       <NavBar/>
       {AllListing.slice((page - 1) * itemsPerPage, page * itemsPerPage).map((lists) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={lists.id}>
           <Card sx={{ border: '1px solid black', height: 580, width: 365 ,margin: '10px'}}>
@@ -149,8 +153,10 @@ const CoomoPageListing = () => {
        <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom:'1rem' }} position='sticky' bottom={0}>
         <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
         </Stack>
+        
 
     </Grid>
+    <Footer/></div>
     
   );
 }

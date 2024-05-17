@@ -29,6 +29,8 @@ import StateContext from '../context/StateContext';
 //Leaflet
 
 import { MapContainer, TileLayer, useMap ,Marker, Polygon,} from 'react-leaflet'
+import NavBar from '../layouts/NavBar';
+import Footer from '../layouts/Footer';
 
 
 const AreaOptions = [
@@ -429,7 +431,9 @@ const AddProperty = () => {
         minHeight: '100vh',
     };
   return (
+    <div>
     <Grid container justifyContent="center" alignItems="center" sx={gridContainerStyle}>
+        <NavBar/>
             <Grid item xs={12} sm={8} md={6} lg={4}>
                 <Paper elevation={10} style={paperStyle} sx={{ backgroundColor: '#f4e6fa' }}>
                     <Grid align='center'>
@@ -571,7 +575,9 @@ const AddProperty = () => {
                     {/* <Button onClick={()=> console.log(state.uploadedPictures)}>Map test BUTTON</Button> */}
                 </Paper>
             </Grid>
+            
         </Grid>
+        <Footer/></div>
   )
 }
 
