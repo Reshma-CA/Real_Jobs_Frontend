@@ -62,34 +62,7 @@ const TVMOptions = [
         value: "Kanjiramkulam",
         label: "Kanjiramkulam",
     },
-    // {
-    //     value: "Shanghumukham Beach",
-    //     label: "Shanghumukham Beach",
-    // },
-    // {
-    //     value: "Vizhinjam Lighthouse",
-    //     label: "Vizhinjam Lighthouse",
-    // },
-    // {
-    //     value: "Ponmudi",
-    //     label: "Ponmudi",
-    // },
-    // {
-    //     value: "Vellayani Lake",
-    //     label: "Vellayani Lake",
-    // },
-    // {
-    //     value: "Kuthiramalika Palace Museum",
-    //     label: "Kuthiramalika Palace Museum",
-    // },
-    // {
-    //     value: "Poovar Island",
-    //     label: "Poovar Island",
-    // },
-    // {
-    //     value: "Poovathoor",
-    //     label: "Poovathoor",
-    // },
+    
 ];
 
 const listingtypeOptions = [

@@ -81,6 +81,8 @@ const Admin_User = () => {
     setPage(1); // Reset to the first page on new search
   };
 
+  // Delete action
+
   const DeleteAction = (id) => {
     Swal.fire({
       title: 'Are you sure?',

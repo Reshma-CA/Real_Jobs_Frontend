@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, Stack, TextField, MenuItem, Select, IconButton, InputLabel, FormControl } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 import { REACT_APP_API_URL } from '../../Api_Constant';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,9 +17,10 @@ const Add_Profile = ({ open, handleClose }) => {
   });
   const [jobProviders, setJobProviders] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Fetch job providers from the API
-    axios.get(`${REACT_APP_API_URL}/job_providers/`)
+    axios.get(`${REACT_APP_API_URL}/api/job_providers/`)
       .then((response) => {
         setJobProviders(response.data);
       })
@@ -29,6 +31,10 @@ const Add_Profile = ({ open, handleClose }) => {
 
   const handleChange = (e) => {
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelect = (e) => {
+    setProfileData({ ...profileData, job_provider: e.target.value });
   };
 
   const handleFileChange = (e) => {
@@ -52,9 +58,9 @@ const Add_Profile = ({ open, handleClose }) => {
       },
     })
       .then((res) => {
-        console.log(res.data);
         toast.success('Profile created successfully!');
         handleClose();
+        navigate(0)
       })
       .catch((error) => {
         console.log('Error creating profile:', error);
@@ -79,12 +85,12 @@ const Add_Profile = ({ open, handleClose }) => {
               id="job_provider"
               name="job_provider"
               value={profileData.job_provider}
-              onChange={handleChange}
+              onChange={handleSelect}
               label="Job Provider"
             >
               <MenuItem value=""><em>None</em></MenuItem>
               {jobProviders.map((provider) => (
-                <MenuItem key={provider.id} value={provider.username}>{provider.username}</MenuItem> 
+                <MenuItem key={provider.id} value={provider.username}>{provider.username}</MenuItem>
               ))}
             </Select>
           </FormControl>

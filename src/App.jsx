@@ -29,6 +29,7 @@ import Admin_User from './components/Admin_pannel/user/Admin_User'
 import Edit_User from './components/Admin_pannel/user/Edit_User'
 
 import Profile_user from './components/Admin_pannel/Profile_Details/Profile_user'
+import Edit_Profile from './components/Admin_pannel/Profile_Details/Edit_Profile';
 import Job_user from './components/Admin_pannel/jobs/Job_user'
 // import Admin_User from './components/Admin_pannel/Admin_User'
 // import Edit_User from './components/Admin_pannel/Edit_User'
@@ -139,15 +140,19 @@ function ReducerFunction(draft,action){
 
            {/* Admin Routes */}
 
-       <Route path="/user" element={<Admin_User/>} />
-      
-       <Route path="/edit/:id" element={<Edit_User />} />
+       
 
        
        <Route path="/alogin" element={<Admin_Login/>} /> 
         <Route path="/dash" element={<Dashboard/>} /> 
 
+       <Route path="/user" element={<Admin_User/>} />
+       <Route path="/edit/:id" element={<Edit_User />} />
+
         <Route path="/profile_user" element={<Profile_user/>} /> 
+        <Route path="/edit_profile/:id" element={<Edit_Profile />} />
+
+
         <Route path="/job_user" element={<Job_user/>} /> 
         </Routes>
         {/* <Footer/> */}

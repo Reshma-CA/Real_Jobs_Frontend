@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Box, Button, Paper, TableContainer, Table, TableHead, TableRow,TableBody, TableCell, Typography } from '@mui/material';
+import { Box, Button, Paper, TableContainer, Table, TableHead, TableRow,TableBody, TableCell, Typography ,} from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Admin_Navbar from '../Admin_Navbar';
 import InputBase from '@mui/material/InputBase';
@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import Add_job from './Add_job';
 
 const columns = [
     { id: 'Job Provider', label: 'Job Provider', minWidth: 100 },
@@ -62,6 +64,15 @@ const Job_user = () => {
     }
   }, []);
 
+  const [openAddModal, setOpenAddModal] = useState(false);
+
+  const handleOpenAddModal = () => {
+    setOpenAddModal(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setOpenAddModal(false);
+  };
 
 
   return (
@@ -71,7 +82,7 @@ const Job_user = () => {
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: 15, marginRight: 5, marginBottom: '200px' }}>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 15 }}>
-            <Button variant="contained" endIcon={<AddCircleOutlineIcon />}>
+            <Button variant="contained" endIcon={<AddCircleOutlineIcon /> } onClick={handleOpenAddModal}>
               Add
             </Button>
           </Box>
@@ -96,27 +107,9 @@ const Job_user = () => {
 
     {/* End of Search button */}
 
-          {/* <TableContainer sx={{ maxHeight: 440, marginTop: 5 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      <Typography variant="subtitle1" fontWeight="bold">
-                        {column.label}
-                      </Typography>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-            </Table>
-          </TableContainer> */}
 
-<TableContainer sx={{ marginTop: 5, marginLeft: '0.1rem' }}>
+
+     <TableContainer sx={{ marginTop: 5, marginLeft: '0.1rem' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -179,6 +172,7 @@ const Job_user = () => {
         </Table>
       </TableContainer>
         </Paper>
+        <Add_job open={openAddModal} handleClose={handleCloseAddModal} />
       </Box>
     </Box>
   );
