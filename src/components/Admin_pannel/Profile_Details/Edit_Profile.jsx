@@ -61,8 +61,9 @@ const Edit_Profile = () => {
         },
       });
     
-      toast.success('Profile updated successfully!');
+      
       navigate('/profile_user');
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.log('Error updating profile:', error);
       toast.error('Failed to update profile.');
@@ -150,7 +151,7 @@ const Edit_Profile = () => {
           </Paper>
         </Grid>
       </Grid>
-      <ToastContainer />
+     
     </div>
   );
 };

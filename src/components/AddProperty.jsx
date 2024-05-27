@@ -379,7 +379,7 @@ const AddProperty = () => {
                 try {
                     const response = await axios.post('http://127.0.0.1:8000/api/Listing/create/', formData); // pass formData here
                     console.log(response.data);
-                    navigate('/listings')
+                    navigate('/comon')
                 } catch (e) {
                     console.log(e.response);
                 }

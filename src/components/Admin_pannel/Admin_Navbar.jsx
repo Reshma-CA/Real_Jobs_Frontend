@@ -31,6 +31,9 @@ import { Link,Button } from '@mui/material';
 import { useContext } from 'react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
+import GroupIcon from '@mui/icons-material/Group';
+import PersonIcon from '@mui/icons-material/Person';
+import WorkIcon from '@mui/icons-material/Work';
 import Swal from 'sweetalert2'; 
 // Contexts
 
@@ -257,7 +260,8 @@ export default function Admin_Navbar() {
                   justifyContent: 'center',
                 }}
               >
-                <DashboardIcon />
+          
+               < GroupIcon/>
               </ListItemIcon>
 
               <ListItemText primary="Users" sx={{ opacity: open ? 1 : 0 }} />
@@ -283,7 +287,7 @@ export default function Admin_Navbar() {
                   justifyContent: 'center',
                 }}
               >
-                <DashboardIcon />
+                <PersonIcon />
               </ListItemIcon>
 
               <ListItemText primary="Profile Details" sx={{ opacity: open ? 1 : 0 }} />
@@ -310,7 +314,7 @@ export default function Admin_Navbar() {
                   justifyContent: 'center',
                 }}
               >
-                <DashboardIcon />
+                <WorkIcon />
               </ListItemIcon>
 
               <ListItemText primary="Jobs" sx={{ opacity: open ? 1 : 0 }} />

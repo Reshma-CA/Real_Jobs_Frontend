@@ -94,8 +94,8 @@ return (
       <Stack spacing={2} margin={2}>
         <TextField variant='outlined' label='Username' id='username' placeholder='Enter username' value={state.usernameValue} onChange={(e) => dispatch({ type: 'catchUsernameChange', usernameChosen: e.target.value })} />
         <TextField variant='outlined' label='Email' id='email' placeholder='Enter email' value={state.email} onChange={(e) => dispatch({ type: 'catchUseremailChange', emailChosen: e.target.value })} />
-        <TextField variant='outlined' label='Password' id='password' placeholder='Enter password' value={state.password} onChange={(e) => dispatch({ type: 'catchUserpasswordChange', passwordChosen: e.target.value })} />
-        <TextField variant='outlined' label='Confirm Password' id='password2' placeholder='Confirm password' value={state.repassword} onChange={(e) => dispatch({ type: 'catchUserrepasswordChange', repasswordChosen: e.target.value })} />
+        <TextField variant='outlined' label='Password' id='password' type='password' placeholder='Enter password' value={state.password} onChange={(e) => dispatch({ type: 'catchUserpasswordChange', passwordChosen: e.target.value })} />
+        <TextField variant='outlined' label='Confirm Password' type='password' id='password2' placeholder='Confirm password' value={state.repassword} onChange={(e) => dispatch({ type: 'catchUserrepasswordChange', repasswordChosen: e.target.value })} />
         <Button color='primary' variant='contained' onClick={(e) => { handleClose(); RegisterhandleAdd(e); }}>Submit</Button>
 
       </Stack>

@@ -11,7 +11,7 @@ import Add_Profile from './Add_Profile';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
-
+import { REACT_APP_API_URL } from '../../Api_Constant';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
@@ -69,10 +69,10 @@ const handlePageChange = (event, value) => {
     setInput(value);
     const filteredResults = allListing.filter((item) => {
       return (
-        item.job_provider_username.toLowerCase().includes(value.toLowerCase()) ||
-        item.agency_name.toLowerCase().includes(value.toLowerCase()) ||
-        item.phone_number.toLowerCase().includes(value.toLowerCase()) ||
-        item.bio.toLowerCase().includes(value.toLowerCase())
+        (item.job_provider_username && item.job_provider_username.toLowerCase().includes(value.toLowerCase())) ||
+        (item.agency_name && item.agency_name.toLowerCase().includes(value.toLowerCase())) ||
+        (item.phone_number && item.phone_number.toLowerCase().includes(value.toLowerCase())) ||
+        (item.bio && item.bio.toLowerCase().includes(value.toLowerCase()))
       );
     });
     setSearchResults(filteredResults);

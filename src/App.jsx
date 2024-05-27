@@ -4,6 +4,7 @@ import {BrowserRouter as Router ,Route,Routes} from 'react-router-dom'
 import './App.css'
 
 import { ToastContainer } from 'react-toastify';
+
 import { useImmerReducer } from 'use-immer'
 import Hero from './components/Hero'
 import Footer from './layouts/Footer'
@@ -17,6 +18,7 @@ import AddProperty from './components/AddProperty'
 import Profile from './components/Profile'
 import AboutUs from './components/AboutUs'
 import CoomoPageListing from './components/CoomoPageListing'
+import FilterData from './components/Filter/FilterData';
 import Agencies from './components/Agencies'
 import AgencyDetail from './components/AgencyDetail'
 
@@ -31,6 +33,7 @@ import Edit_User from './components/Admin_pannel/user/Edit_User'
 import Profile_user from './components/Admin_pannel/Profile_Details/Profile_user'
 import Edit_Profile from './components/Admin_pannel/Profile_Details/Edit_Profile';
 import Job_user from './components/Admin_pannel/jobs/Job_user'
+import Edit_job from './components/Admin_pannel/jobs/Edit_job';
 // import Admin_User from './components/Admin_pannel/Admin_User'
 // import Edit_User from './components/Admin_pannel/Edit_User'
 // import User_Add from './components/Admin_pannel/User_Add'
@@ -126,13 +129,14 @@ function ReducerFunction(draft,action){
           <Route path="/" element={<Hero />} />
           <Route path="/listings/:id" element={<Listings />} />
           <Route path="/comon" element={<CoomoPageListing />} />
+           <Route path="/filterdata" element={<FilterData />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/addproperty" element={<AddProperty />} />
           <Route path="/agency" element={<Agencies />} />
           <Route path="/agencydetail/:id" element={< AgencyDetail />} />
-          {/* <Route path="/testing" element={<Testing />} /> */}
+         
           <Route path="/aboutus" element={<AboutUs />} />
 
           <Route path="/test" element={<Test />} />
@@ -154,6 +158,7 @@ function ReducerFunction(draft,action){
 
 
         <Route path="/job_user" element={<Job_user/>} /> 
+        <Route path="/edit_job/:id" element={<Edit_job />} />
         </Routes>
         {/* <Footer/> */}
         </GoogleOAuthProvider>
