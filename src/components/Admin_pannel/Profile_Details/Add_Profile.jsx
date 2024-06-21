@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, Stack, TextField, MenuItem, Select, IconButton, InputLabel, FormControl } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, Stack, TextField, MenuItem, Select, IconButton, InputLabel, FormControl, FormHelperText } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ const Add_Profile = ({ open, handleClose }) => {
     profile_picture: null,
   });
   const [jobProviders, setJobProviders] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -41,31 +42,48 @@ const Add_Profile = ({ open, handleClose }) => {
     setProfileData({ ...profileData, profile_picture: e.target.files[0] });
   };
 
+  const validateForm = () => {
+    let tempErrors = {};
+    if (!profileData.job_provider) tempErrors.job_provider = 'Job Provider is required';
+    if (!profileData.agency_name) tempErrors.agency_name = 'Agency Name is required';
+    if (!profileData.phone_number) tempErrors.phone_number = 'Phone Number is required';
+    if (!profileData.bio) tempErrors.bio = 'Bio is required';
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('job_provider', profileData.job_provider);
-    formData.append('agency_name', profileData.agency_name);
-    formData.append('phone_number', profileData.phone_number);
-    formData.append('bio', profileData.bio);
-    if (profileData.profile_picture) {
-      formData.append('profile_picture', profileData.profile_picture);
-    }
+    if (validateForm()) {
+      const formData = new FormData();
+      formData.append('job_provider', profileData.job_provider);
+      formData.append('agency_name', profileData.agency_name);
+      formData.append('phone_number', profileData.phone_number);
+      formData.append('bio', profileData.bio);
+      if (profileData.profile_picture) {
+        formData.append('profile_picture', profileData.profile_picture);
+      }
 
-    axios.post(`${REACT_APP_API_URL}/profiles/create/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((res) => {
-        toast.success('Profile created successfully!');
-        handleClose();
-        navigate(0)
+      axios.post(`${REACT_APP_API_URL}/profiles/create/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      .catch((error) => {
-        console.log('Error creating profile:', error);
-        toast.error('Failed to create profile.');
-      });
+        .then((res) => {
+          toast.success('Profile created successfully!');
+          handleClose();
+          navigate(0);
+        })
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.detail) {
+            toast.error(error.response.data.detail);
+          } else {
+            toast.error('Failed to create profile.');
+          }
+        });
+    } else {
+      toast.error('Please fill out all required fields.');
+    }
   };
 
   return (
@@ -78,7 +96,7 @@ const Add_Profile = ({ open, handleClose }) => {
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2} margin={2}>
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined" fullWidth error={!!errors.job_provider}>
             <InputLabel id="job-provider-label">Job Provider</InputLabel>
             <Select
               labelId="job-provider-label"
@@ -93,6 +111,7 @@ const Add_Profile = ({ open, handleClose }) => {
                 <MenuItem key={provider.id} value={provider.username}>{provider.username}</MenuItem>
               ))}
             </Select>
+            {errors.job_provider && <FormHelperText>{errors.job_provider}</FormHelperText>}
           </FormControl>
           <TextField
             variant='outlined'
@@ -103,6 +122,8 @@ const Add_Profile = ({ open, handleClose }) => {
             value={profileData.agency_name}
             onChange={handleChange}
             fullWidth
+            error={!!errors.agency_name}
+            helperText={errors.agency_name}
           />
           <TextField
             variant='outlined'
@@ -113,6 +134,8 @@ const Add_Profile = ({ open, handleClose }) => {
             value={profileData.phone_number}
             onChange={handleChange}
             fullWidth
+            error={!!errors.phone_number}
+            helperText={errors.phone_number}
           />
           <TextField
             variant='outlined'
@@ -125,6 +148,8 @@ const Add_Profile = ({ open, handleClose }) => {
             multiline
             rows={6}
             fullWidth
+            error={!!errors.bio}
+            helperText={errors.bio}
           />
           <Button
             variant="contained"

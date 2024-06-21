@@ -89,7 +89,7 @@ const NavBar = () => {
                   
                   // Dispatch action to clear Google authentication state
                   GlobalDispatch({ type: 'logout' });
-                  Swal.fire("Google Logout successful", "", "success");
+                  Swal.fire("Logout successful", "", "success");
               } else {
                   const response = await axios.post(
                       'http://127.0.0.1:8000/api-auth-djoser/token/logout/',

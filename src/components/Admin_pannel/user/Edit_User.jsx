@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Edit_User = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Import useNavigate hook
+  const navigate = useNavigate(); 
 
   const [allListings, setAllListings] = useState({
     id: id,
@@ -16,33 +16,68 @@ const Edit_User = () => {
     email: '',
     password: '',
     password2: '',
+    passwordError: '',
+    password2Error: ''
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${REACT_APP_API_URL}/api/userAdminedit/${id}/`);
-        setAllListings({
-          ...allListings,
+        setAllListings((prevState) => ({
+          ...prevState,
           username: response.data.username,
           email: response.data.email,
-        });
+        }));
       } catch (error) {
         console.log('Error fetching user details:', error);
       }
     };
 
     fetchData();
-  }, [id]); // Ensure useEffect runs when the id changes
+  }, [id]); 
+
+  const validatePassword = () => {
+    let valid = true;
+
+    if (allListings.password.trim() === '') {
+      setAllListings((prevState) => ({ ...prevState, passwordError: 'Password is required' }));
+      valid = false;
+    } else {
+      setAllListings((prevState) => ({ ...prevState, passwordError: '' }));
+    }
+
+    if (allListings.password2.trim() === '') {
+      setAllListings((prevState) => ({ ...prevState, password2Error: 'Confirmation password is required' }));
+      valid = false;
+    } else {
+      setAllListings((prevState) => ({ ...prevState, password2Error: '' }));
+    }
+
+    if (allListings.password !== allListings.password2) {
+      setAllListings((prevState) => ({ ...prevState, password2Error: 'Passwords do not match' }));
+      valid = false;
+    }
+
+    return valid;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted');
-    axios.put(`${REACT_APP_API_URL}/api/userAdminedit/${id}/`, allListings)
+
+    if (!validatePassword()) {
+      return;
+    }
+
+    axios.put(`${REACT_APP_API_URL}/api/userAdminedit/${id}/`, {
+      username: allListings.username,
+      email: allListings.email,
+      password: allListings.password,
+      password2: allListings.password2
+    })
       .then(res => {
-        console.log(res.data);
         toast.success('User updated successfully!');
-        navigate('/user'); // Navigate to the user page
+        navigate('/user'); 
       })
       .catch(error => {
         console.log('Error updating user:', error);
@@ -53,8 +88,6 @@ const Edit_User = () => {
   const handleCancel = (e) => {
     e.preventDefault();
     navigate('/user');
-    console.log('Form cancelled');
-    
   };
 
   return (
@@ -93,9 +126,10 @@ const Edit_User = () => {
                 type='password'
                 style={{ margin: '8px 0' }}
                 fullWidth
-                required
                 value={allListings.password}
                 onChange={(e) => setAllListings({ ...allListings, password: e.target.value })}
+                error={Boolean(allListings.passwordError)}
+                helperText={allListings.passwordError}
               />
               <TextField
                 label='Confirm password'
@@ -104,13 +138,14 @@ const Edit_User = () => {
                 type='password'
                 style={{ margin: '8px 0' }}
                 fullWidth
-                required
                 value={allListings.password2}
                 onChange={(e) => setAllListings({ ...allListings, password2: e.target.value })}
+                error={Boolean(allListings.password2Error)}
+                helperText={allListings.password2Error}
               />
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
-                  <Button variant="contained" style={{ backgroundColor: '#9d13bf', animation: 'glitter 1.5s infinite' }} type="submit">Update</Button>
+                  <Button variant="contained" style={{ backgroundColor: '#9d13bf' }} type="submit">Update</Button>
                   <Button variant="contained" style={{ backgroundColor: '#ff0000' }} onClick={handleCancel}>Cancel</Button>
                 </div>
               </div>

@@ -7,6 +7,11 @@ import { Link,useNavigate } from 'react-router-dom';
 import {useImmerReducer} from 'use-immer';
 import axios from 'axios'
 
+// Toast
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Context
 import DispatchContxt from '../../context/DispatchContxt';
 import StateContext from '../../context/StateContext';
@@ -21,7 +26,9 @@ const Admin_Login = () => {
     usernameValue:'',
     password:'',
     sendRequest:0,
-    token:''
+    token:'',
+    usernameError: '',
+    passwordError: ''
 
     
 }
@@ -30,11 +37,13 @@ function ReducerFunction(draft,action){
     switch (action.type) {
         case 'catchUsernameChange':
             draft.usernameValue = action.usernameChosen;
+            draft.usernameError = ''; // Reset error on change
             break;
 
         
         case 'catchUserpasswordChange':
             draft.password = action.passwordChosen;
+            draft.passwordError = ''; // Reset error on change
             break;
 
         
@@ -46,6 +55,17 @@ function ReducerFunction(draft,action){
         case 'catchToken':
               draft.token = action.tokenValue
               break;
+
+        case 'setUsernameError':
+              draft.usernameError = action.error;
+              break;
+          
+        case 'setPasswordError':
+              draft.passwordError = action.error;
+              break;
+
+        default:
+          break;
          
             
     }
@@ -60,8 +80,21 @@ const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
   
   const loginHandle =(e) => {
     e.preventDefault();
-    console.log('the form has been submitted')
-    dispatch({type:'changeSendRequest'})
+    let valid = true;
+  
+    if (state.usernameValue.trim() === '') {
+      dispatch({ type: 'setUsernameError', error: 'Username is required' });
+      valid = false;
+    }
+
+    if (state.password.trim() === '') {
+      dispatch({ type: 'setPasswordError', error: 'Password is required' });
+      valid = false;
+    }
+
+    if (valid) {
+      dispatch({ type: 'changeSendRequest' });
+    }
 
 
  
@@ -86,11 +119,11 @@ const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
           console.log(response)
           dispatch({type:'catchToken',tokenValue: response.data.auth_token})
           GlobalDispatch({type:'catchToken',tokenValue: response.data.auth_token})
-          // navigate('/login')
-    
+        
 
         }catch(error){
           console.log(error.response)
+          toast.error('Failed Login!');
         }
       }
       SignIn()
@@ -120,9 +153,12 @@ const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
                   console.log(response);
                   GlobalDispatch({type:'userSignIn',usernameInfo:response.data.username,
                   emailInfo:response.data.email,IdInfo:response.data.id})
+                  toast.success('Admin Login successfully!');
                   navigate('/dash');
               } catch (error) {
                   console.log(error.response);
+                  
+                 
               }
           }
           GetUserInfo();
@@ -145,7 +181,7 @@ const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
     );
     console.log(response)
     GlobalDispatch({type:'logout'})
-    navigate('/aboutus')
+    navigate('/alogin')
     
     }catch(e){
       console.log(e.response)
@@ -168,18 +204,24 @@ const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
       <h2 style={{color:'purple'}}>Admin Login</h2>
       </Grid>
      
-      <TextField label='Admin username ' placeholder='enter username' style={btstyle} fullWidth required value={state.usernameValue} onChange={(e)=>dispatch({type:'catchUsernameChange',usernameChosen:e.target.value})} />
+      <TextField label='Admin username ' placeholder='enter username' style={btstyle} fullWidth required value={state.usernameValue} onChange={(e)=>dispatch({type:'catchUsernameChange',usernameChosen:e.target.value})} 
+        error={Boolean(state.usernameError)}
+        helperText={state.usernameError}
+        />
      
       
                 
-      <TextField label=' Admin password' placeholder='enter password' type= 'password' style={{ ...btstyle, marginBottom: '30px' }}  fullWidth required value={state.password} onChange={(e)=>dispatch({type:'catchUserpasswordChange',passwordChosen:e.target.value})}/>
+      <TextField label=' Admin password' placeholder='enter password' type= 'password' style={{ ...btstyle, marginBottom: '30px' }}  fullWidth required value={state.password} onChange={(e)=>dispatch({type:'catchUserpasswordChange',passwordChosen:e.target.value})}
+        error={Boolean(state.passwordError)}
+        helperText={state.passwordError}
+        />
 
-      {/* <FormControlLabel required control={<Checkbox />} label="Remember me" /> */}
-
+  
      <Link to ="/dash"><Button variant="contained" type='Submit' color='primary' style={btstyle} fullWidth onClick={loginHandle}>
         Login</Button></Link>
 
     </Paper>
+    
 </Grid>
   )
 }

@@ -133,11 +133,11 @@ const Profile = () => {
                                     Welcome <span style={{color:'#db2c78',fontWeight:'bold'}}>{GlobalState.userUserName}</span>
                                 </Typography>
                             </Grid>
-                            <Grid item>
+                            {/* <Grid item>
                                 <Typography variant='h5' style={{textAlign:'center',marginTop:'1rem'}}>
                                     You have {PropertyDisplay()}      
                                 </Typography>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
                 );

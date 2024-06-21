@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
-import { Dialog, DialogTitle, DialogContent, MenuItem, FormControl, InputLabel, Select, Button, IconButton, Stack, TextField, Grid } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, MenuItem,Alert, FormControl, InputLabel, Select, Button, IconButton, Stack, TextField, Grid ,FormHelperText} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { MapContainer, TileLayer, useMap, Marker, Polygon } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
@@ -50,32 +50,63 @@ const Add_job = ({ open, handleClose }) => {
     longitudeValue: '',
     priceValue: '',
     picture1Value: '',
-    // picture2Value: '',
-    // picture3Value: '',
-    // picture4Value: '',
-    // picture5Value: '',
     mapInstance: null,
     markerPosition: { lat: '8.5241', lng: '76.9366' },
     uploadedPictures: [],
     sendRequest: 0,
+    titleErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  },
+  listingTypeErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  },   
+  PriceErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  }, 
+
+  DescriptionErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  }, 
+  AreaErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  },  
+  BoroughErrors:{
+      hashErrors:false,
+      errorMessage:'',
+  }, 
   };
 
   function ReducerFunction(draft, action) {
     switch (action.type) {
       case 'catchTitleChange':
         draft.titleValue = action.titleChosen;
+        draft.titleErrors.hasErrors= false;
+        draft.titleErrors.errorMessage= '';
         break;
       case 'catchListingTypeChange':
         draft.listingTypeValue = action.listingTypeChosen;
+        draft.listingTypeErrors.hasErrors= false;
+        draft.listingTypeErrors.errorMessage= '';
         break;
       case 'catchDescriptionValueChange':
         draft.descriptionValue = action.descriptionChosen;
+        draft.DescriptionErrors.hasErrors= false;
+        draft.DescriptionErrors.errorMessage= '';
         break;
       case 'catchAreaValueChange':
         draft.areaValue = action.areaValueChosen;
+        draft.AreaErrors.hasErrors= false;
+        draft.AreaErrors.errorMessage= '';
         break;
       case 'catchBoroughValueChange':
         draft.boroughValue = action.boroughValueChosen;
+        draft.BoroughErrors.hasErrors= false;
+        draft.BoroughErrors.errorMessage= '';
         break;
       case 'catchLatitudeValueChange':
         draft.latitudeValue = action.latitudeValueChosen;
@@ -85,22 +116,13 @@ const Add_job = ({ open, handleClose }) => {
         break;
       case 'catchPriceValueChange':
         draft.priceValue = action.priceValueChosen;
+        draft.PriceErrors.hasErrors= false;
+        draft.PriceErrors.errorMessage= '';
         break;
       case 'catchPicture1ValueChange':
         draft.picture1Value = action.picture1ValueChosen;
         break;
-      // case 'catchPicture2ValueChange':
-      //   draft.picture2Value = action.picture2ValueChosen;
-      //   break;
-      // case 'catchPicture3ValueChange':
-      //   draft.picture3Value = action.picture3ValueChosen;
-      //   break;
-      // case 'catchPicture4ValueChange':
-      //   draft.picture4Value = action.picture4ValueChosen;
-      //   break;
-      // case 'catchPicture5ValueChange':
-      //   draft.picture5Value = action.picture5ValueChosen;
-      //   break;
+  
       case 'getMap':
         draft.mapInstance = action.mapData;
         break;
@@ -116,8 +138,82 @@ const Add_job = ({ open, handleClose }) => {
       case 'changeSendRequest':
         draft.sendRequest = draft.sendRequest + 1;
         break;
-      default:
-        break;
+
+
+      case 'catchTitleErrors':
+          if(action.titleChosen.length ===0){
+              draft.titleErrors.hasErrors = true;
+              draft.titleErrors.errorMessage = 'Title is required'
+          }
+          break;
+
+
+      case 'catchListingTypeErrors':
+          if(action.listingTypeChosen.length ===0){
+              draft.listingTypeErrors.hasErrors = true;
+              draft.listingTypeErrors.errorMessage = 'Type of building is required'
+          }
+          break;
+
+      case 'catchPriceErrors':
+          if(action.priceValueChosen.length ===0){
+              draft.PriceErrors.hasErrors = true;
+              draft.PriceErrors.errorMessage = 'Price is required'
+          }
+          break;
+          
+     case 'catchDescriptionErrors':
+          if(action.descriptionChosen.length <= 100){
+              draft.DescriptionErrors.hasErrors = true;
+              draft.DescriptionErrors.errorMessage = 'Description must be 100 words';
+          }
+          break;
+
+      case 'catchAreaErrors':
+          if(action.areaValueChosen.length ===0){
+              draft.AreaErrors.hasErrors = true;
+              draft.AreaErrors.errorMessage = 'Area is required'
+          }
+          break;
+
+      case 'catchBoroughErrors':
+          if(action.boroughValueChosen.length ===0){
+              draft.BoroughErrors.hasErrors = true;
+              draft.BoroughErrors.errorMessage = 'Borough is required'
+          }
+          break; 
+          
+      case 'emptyTitle':
+          draft.titleErrors.hasErrors = true
+          draft.titleErrors.errorMessage = 'This field must not be empty'
+          break;
+
+      case 'emptylistingType':
+          draft.listingTypeErrors.hasErrors = true
+          draft.listingTypeErrors.errorMessage = 'This field must not be empty'
+          break;
+
+      case 'emptyprice':
+          draft.PriceErrors.hasErrors = true
+          draft.PriceErrors.errorMessage = 'This field must not be empty'
+          break;
+
+      case 'emptydescription':
+          draft.DescriptionErrors.hasErrors = true
+          draft.DescriptionErrors.errorMessage = 'This field must not be empty'
+          break;
+
+      case 'emptyarea':
+          draft.AreaErrors.hasErrors = true
+          draft.AreaErrors.errorMessage = 'This field must not be empty'
+          break;
+
+      case 'emptyborough':
+          draft.BoroughErrors.hasErrors = true
+          draft.BoroughErrors.errorMessage = 'This field must not be empty'
+          break;
+
+     
     }
   }
 
@@ -128,15 +224,7 @@ const Add_job = ({ open, handleClose }) => {
   });
   const [jobProviders, setJobProviders] = useState([]);
 
-  // useEffect(() => {
-  //   axios.get(`${REACT_APP_API_URL}/api/job_providers/`)
-  //     .then((response) => {
-  //       setJobProviders(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log('Error fetching job providers:', error);
-  //     });
-  // }, []);
+ 
 
     useEffect(() => {
       axios.get(`${REACT_APP_API_URL}/api/job_providers/`)
@@ -175,6 +263,7 @@ const Add_job = ({ open, handleClose }) => {
                 console.log(response.data);
                 navigate('/job_user');
                 toast.success('User updated successfully!');
+                navigate(0);
             } catch (e) {
                 console.log(e.response);
                 toast.error('Failed to update user.');
@@ -236,34 +325,52 @@ const Add_job = ({ open, handleClose }) => {
     }
   }, [state.uploadedPictures[0], dispatch]);
 
-  // useEffect(() => {
-  //   if (state.uploadedPictures[1]) {
-  //     dispatch({ type: 'catchPicture2ValueChange', picture2ValueChosen: state.uploadedPictures[1] });
-  //   }
-  // }, [state.uploadedPictures[1], dispatch]);
-
-  // useEffect(() => {
-  //   if (state.uploadedPictures[2]) {
-  //     dispatch({ type: 'catchPicture3ValueChange', picture3ValueChosen: state.uploadedPictures[2] });
-  //   }
-  // }, [state.uploadedPictures[2], dispatch]);
-
-  // useEffect(() => {
-  //   if (state.uploadedPictures[3]) {
-  //     dispatch({ type: 'catchPicture4ValueChange', picture4ValueChosen: state.uploadedPictures[3] });
-  //   }
-  // }, [state.uploadedPictures[3], dispatch]);
-
-  // useEffect(() => {
-  //   if (state.uploadedPictures[4]) {
-  //     dispatch({ type: 'catchPicture5ValueChange', picture5ValueChosen: state.uploadedPictures[4] });
-  //   }
-  // }, [state.uploadedPictures[4], dispatch]);
-
+ 
   function HandleSubmit(e) {
     e.preventDefault();
-    dispatch({ type: 'changeSendRequest' });
-  }
+        console.log('the form has been submitted')
+
+        if(!state.titleErrors.hasErrors && 
+            !state.listingTypeErrors. hasErrors && 
+            !state.PriceErrors.hasErrors &&
+            !state.DescriptionErrors.hasErrors &&
+            !state.AreaErrors.hasErrors &&
+            !state.BoroughErrors.hasErrors &&
+            state.latitudeValue && 
+            state.longitudeValue 
+           
+        ){
+            dispatch({type:'changeSendRequest'})
+
+        }
+        else if(state.titleValue === ''){
+            dispatch({type:'emptyTitle'})
+            window.scrollTo(0,0);
+        }
+        else if(state.listingTypeValue === ''){
+            dispatch({type:'emptylistingType'})
+            window.scrollTo(0,0);
+        }
+
+        else if(state.priceValue === ''){
+            dispatch({type:'emptyprice'})
+            window.scrollTo(0,0);
+        }
+        else if(state.descriptionValue === ''){
+            dispatch({type:'emptydescription'})
+            window.scrollTo(0,0);
+        }
+        
+        else if(state.areaValue === ''){
+            dispatch({type:'emptyarea'})
+            window.scrollTo(0,0);
+        }
+        else if(state.boroughValue === ''){
+            dispatch({type:'emptyborough'})
+            window.scrollTo(0,0);
+        }
+       
+    }
 
 
  
@@ -295,9 +402,12 @@ const Add_job = ({ open, handleClose }) => {
                   label="Title"
                   variant="outlined"
                   fullWidth
-                  required
+                 
                   value={state.titleValue}
                   onChange={(e) => dispatch({ type: 'catchTitleChange', titleChosen: e.target.value })}
+                  onBlur={(e) => dispatch({ type: 'catchTitleErrors', titleChosen: e.target.value })}
+                  error={state.titleErrors.hasErrors}
+                  helperText={state.titleErrors.errorMessage}
                 />
                 
       
@@ -319,7 +429,7 @@ const Add_job = ({ open, handleClose }) => {
             </Select>
         </FormControl>
 
-                <FormControl fullWidth>
+                <FormControl fullWidth error={state.listingTypeErrors.hasErrors}>
                   <InputLabel id="listingTypeLabel">Listing Type</InputLabel>
                   <Select
                     labelId="listingTypeLabel"
@@ -327,6 +437,7 @@ const Add_job = ({ open, handleClose }) => {
                     value={state.listingTypeValue}
                     label="Listing Type"
                     onChange={(e) => dispatch({ type: 'catchListingTypeChange', listingTypeChosen: e.target.value })}
+                    onBlur={(e)=>dispatch({type:'catchListingTypeErrors',listingTypeChosen:e.target.value})}
                   >
                     {listingtypeOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
@@ -334,6 +445,9 @@ const Add_job = ({ open, handleClose }) => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {state.listingTypeErrors.hasErrors && (
+                        <FormHelperText>{state.listingTypeErrors.errorMessage}</FormHelperText>
+                    )}
                 </FormControl>
                 <TextField
                   id="description"
@@ -344,8 +458,11 @@ const Add_job = ({ open, handleClose }) => {
                   rows={4}
                   value={state.descriptionValue}
                   onChange={(e) => dispatch({ type: 'catchDescriptionValueChange', descriptionChosen: e.target.value })}
-                />
-                <FormControl fullWidth>
+                  onBlur={(e)=>dispatch({type:'catchDescriptionErrors',descriptionChosen:e.target.value})}
+                  error ={state.DescriptionErrors.hasErrors ? true:false}
+                  helperText={state.DescriptionErrors.errorMessage}/>  
+            
+                <FormControl fullWidth  error={state.AreaErrors.hasErrors}>
                   <InputLabel id="areaLabel">Area</InputLabel>
                   <Select
                     labelId="areaLabel"
@@ -353,6 +470,7 @@ const Add_job = ({ open, handleClose }) => {
                     value={state.areaValue}
                     label="Area"
                     onChange={(e) => dispatch({ type: 'catchAreaValueChange', areaValueChosen: e.target.value })}
+                    onBlur={(e) => dispatch({ type: 'catchAreaErrors', areaValueChosen: e.target.value })}
                   >
                     {AreaOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
@@ -360,6 +478,9 @@ const Add_job = ({ open, handleClose }) => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {state.AreaErrors.hasErrors && (
+                    <FormHelperText>{state.AreaErrors.errorMessage}</FormHelperText>
+                )}
                 </FormControl>
                 <FormControl fullWidth>
                   <InputLabel id="boroughLabel">Borough</InputLabel>
@@ -400,6 +521,10 @@ const Add_job = ({ open, handleClose }) => {
                   fullWidth
                   value={state.priceValue}
                   onChange={(e) => dispatch({ type: 'catchPriceValueChange', priceValueChosen: e.target.value })}
+                  onBlur={(e)=>dispatch({type:'catchPriceErrors',priceValueChosen:e.target.value})}
+                    
+                  error ={state.PriceErrors.hasErrors ? true:false}
+                  helperText={state.PriceErrors.errorMessage}
                 />
               </Stack>
             </Grid>
@@ -418,6 +543,17 @@ const Add_job = ({ open, handleClose }) => {
                     onChange={(e) => dispatch({ type: 'catchUploadedPictures', picturesChosen: Array.from(e.target.files) })}
                   />
                 </Button>
+
+                    {/* map */}
+
+                    <Grid item style ={{marginTop:'1rem'}}>
+                        {state.latitudeValue && state.longitudeValue ? <Alert severity='success'>Your property is located @ 
+                            {state.latitudeValue} ,{state.longitudeValue} 
+
+                        </Alert>: <Alert severity='warning'>Locate your property on the map before submitting this form</Alert>}
+
+
+                    </Grid>
                 <MapContainer center={[8.5241, 76.9366]} zoom={13} style={{ height: '400px' }}>
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

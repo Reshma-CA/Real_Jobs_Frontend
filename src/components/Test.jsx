@@ -1,266 +1,124 @@
-import React from 'react'
-import axios from "axios";
-// leaflet
-import { MapContainer, TileLayer, useMap,Marker,Popup ,Polyline,Polygon} from 'react-leaflet'
-import { Icon } from "leaflet";
-// MUI
-import { Box,Grid,AppBar,Typography,Button,Card,CardHeader,CardMedia,CardContent,CircularProgress,IconButton,CardActions,} from "@mui/material";
-import RoomIcon from '@mui/icons-material/Room';
-// Map icons
-import  houseIconPng from '../assets/Mapicons/house.png';
-import apartmentIconPng from '../assets/Mapicons/apartment.png';
-import officeIconPng from '../assets/Mapicons/office.png';
-import { useNavigate } from 'react-router-dom';
-import {useImmerReducer} from 'use-immer';
-//Assets
-import Img1 from '../assets/img1.jpg'
-import { useState,useEffect } from 'react';
-import Tvmlisting from '../assets/Data/DummydataTvm'
-import polygonOne from './Shape';
-import { TvOff } from '@mui/icons-material';
+// import React, { useState, useRef, useEffect } from 'react';
+// import ChatBotIMG from '../../assets/Chatbot/Chat_bot.jpg';
+// import { Button } from '@mui/material';
+// import SendIcon from '@mui/icons-material/Send';
+// import './Chatboat.css';
 
+// const Test = () => {
+//   const date = new Date();
+//   const hours = date.getHours();
+//   const minutes = date.getMinutes();
+//   const seconds = date.getSeconds();
+//   const day = date.getDay();
+//   const month = date.getMonth();
+//   const year = date.getFullYear();
+//   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+//   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-// Context
-import DispatchContxt from '../context/DispatchContxt';
-import StateContext from '../context/StateContext';
-const Listings = () => {
-  
-    
+//   const [time, setTime] = useState(`${hours}:${minutes}:${seconds}`);
+//   const [dateTime, setDateTime] = useState(`${days[day]}, ${months[month]} ${year}`);
 
+//   const inputRef = useRef(null);
+//   const botMessageRef = useRef(null);
+//   const userMessageRef = useRef(null);
 
-      const houseIcon = new Icon({
-        iconUrl: houseIconPng,
-        iconSize: [40, 40],
-      });
+//   useEffect(() => {
+//     checkStatus();
+//   }, [dateTime]);
 
-      const apartmentIcon = new Icon({
-        iconUrl: apartmentIconPng,
-        iconSize: [40, 40],
-      });
+//   const checkStatus = () => {
+//     let isActive = dateTime !== "Tuesday, June 18 2024";
+//     const status = document.querySelector(".status");
 
-      const officeIcon = new Icon({
-        iconUrl: officeIconPng,
-        iconSize: [40, 40],
-      });
-      
+//     if (isActive) {
+//       status.innerHTML = "Active";
+//       status.style.color = "green";
+//     } else {
+//       status.innerHTML = "Not Active";
+//       status.style.color = "red";
+//     }
+//   };
 
-      const [Latitude,setLatitude] = useState(8.5241)
-      const [Longitude,setLongitude] = useState(76.9366)
+//   const handleInput = () => {
+//     const botMessage = botMessageRef.current;
+//     const userMessage = userMessageRef.current;
+//     const input = inputRef.current;
 
-      const initialState= {
-          mapInstance:null,
-        
-    }
+//     if (!input.value) return;
 
-    function ReducerFunction(draft,action){
-        switch (action.type) {
-            
-            case 'getMap':
-              draft.mapInstance = action.mapData;
-              break;
-            default:
-              break;
+//     userMessage.innerHTML = input.value; // display the input value and append it to the message2 id
 
-          
+//     const showMessage = (message) => {
+//       botMessage.innerHTML = "Typing...";
+//       setTimeout(() => {
+//         botMessage.innerHTML = message;
+//         input.value = ''; // clear the input
+//       }, 2000);
+//     };
 
-           
-           
-                
-        }
-}
-    const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
-    const navigate = useNavigate()
+//     const responses = [
+//       { pattern: /fuck|bad|stupid|useless|bitch|crazy|nonsense/i, response: "Please do not use bad words" },
+//       { pattern: /hi|hello|hey|sup|yo|wassup|whats up|howdy|greetings|good morning|good afternoon|good evening/i, response: "Hello There, how are you doing today?" },
+//       { pattern: /bye|goodbye|see you later|cya|goodnight/i, response: "Bye, have a nice day" },
+//       { pattern: /thanks|thank you/i, response: "You are welcome" },
+//       { pattern: /how are you|how are you doing/i, response: "I am fine, thank you" },
+//       { pattern: /that's good|sounds nice|that sounds awesome|that sounds great|great|nice/i, response: "😁" },
+//       { pattern: /i'm fine|i am fine|i'm great|i'm good|great/i, response: "That is good" },
+//       { pattern: /what's your name|what is your name/i, response: "My name is Bot" },
+//       { pattern: /who is the owner|who made you|who is your maker|who is your owner/i, response: "The owner of this bot is Treasure" },
+//       { pattern: /who's treasure|who is treasure/i, response: "Treasure is a programmer based on ReactJS and NodeJS. He is the owner of a YouTube channel called Creative Tutorials" },
+//       { pattern: /what's your age|how old are you/i, response: "I am 1 year old" },
+//     ];
 
+//     // Log the user input and matched response
+//     console.log("User Input:", input.value);
 
-    function TheMapcomponent(){
-        const map = useMap()
-        dispatch({type:'getMap', mapData:map})
-        return null;
-    }
+//     // Find the first matching response
+//     const matchedResponse = responses.find(({ pattern }) => pattern.test(input.value));
+//     if (matchedResponse) {
+//       console.log("Matched Response:", matchedResponse.response);
+//       showMessage(matchedResponse.response);
+//     } else {
+//       console.log("No match found, sending default response.");
+//       showMessage("I don't understand that.");
+//     }
+//   };
 
-      
-      function GoEast(){
-        setLatitude(8.609229625462214)
-        setLongitude(77.00523563642957)
-      }
+//   return (
+//     <div className='MyApp'>
+//       <div className='wrapper'>
+//         <div className="content">
+//           <div className="header">
+//             <div className="img">
+//               <img src={ChatBotIMG} alt="Chatbot" />
+//             </div>
+//             <div className="right">
+//               <div className="name">ChatBot</div>
+//               <div className="status">Active</div>
+//             </div>
+//           </div>
+//           <div className="main">
+//             <div className="main_content">
+//               <div className="messages">
+//                 <div className="bot-message" ref={botMessageRef}></div>
+//                 <div className="human-message" ref={userMessageRef}></div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="bottom">
+//             <div className="btm">
+//               <div className="input">
+//                 <input type="text" id="input" ref={inputRef} placeholder='Enter your message' />
+//               </div>
+//               <div className="btn">
+//                 <Button onClick={handleInput} startIcon={<SendIcon />}>Send</Button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-      function GoCenter(){
-        setLatitude(8.5241)
-        setLongitude(76.9366)
-      }
-    
-   
-      
-    const polyOne = [
-        [8.5241, 76.9366], // Thiruvananthapuram
-        [8.5034, 76.9745], // Kazhakootam
-        [8.5375, 76.8706], // Kovalam
-      ];
-
-    const[AllListing,setAllListing] = useState([]);
-
-    const[dataIsLoading,setdataIsLoading] = useState(true);
-
-
-      
-   useEffect(() => {
-    const source = axios.CancelToken.source()
-    async function GetAllListings(){
-      try{
-        const response = await axios.get('http://127.0.0.1:8000/api/Listing/',{cancelToken:source.token})
-      // console.log(response.data)
-      setAllListing(response.data);
-      setdataIsLoading(false)
-
-      }catch(error){
-        console.log(error.response)
-      }
-    }
-    GetAllListings()
-    return()=>{
-      source.cancel();
-    }
-   }, [])
-   
-   if(dataIsLoading === false ){
-    
-   console.log(AllListing[0].location);
-   }
-
-   if(dataIsLoading === true ){
-    
-    return (
-      <Grid container justifyContent='center' alignItems='center' style={{height:'100vh'}}>
-        <CircularProgress />
-      </Grid>
-    )
-    }
-      
-      
-
-  return (
-  <Grid container >
-    <Grid item xs={4} >
-      {AllListing.map((lists)=>{
-        return(
-          <Card key={lists.id} sx={{margin:'0.5rem',border:'1px solid black'}} style={{padding:'10xp',marginBottom:"30px"}}>
-            <CardHeader
-          
-            action={
-              <IconButton aria-label="settings" onClick={()=>state.mapInstance.flyTo([lists.latitude,lists.longitude],16)}>
-                <RoomIcon />
-              </IconButton>
-            }
-          
-            title={lists.title}
-        
-          />
-          <Box >
-        <CardMedia
-          sx={{  height: '20rem',
-          width: '28rem',
-          objectFit: 'cover',
-          borderRadius: '8px',
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-         
-          }}
-         style={{paddingLeft:'1rem'}}
-          component="img"
-          image={lists.picture1}
-          alt={lists.title}
-        />
-        </Box>
-          <CardContent >
-                
-            <Typography variant="body2" >
-              {lists.description.substring(0,100)}...
-            </Typography>
-            <br/>
-            <Box sx={{ marginBottom: '0.5rem'}}>
-          <Typography style={{position:'absolute',
-          backgroundColor:'#991dbf',
-          zIndex:'1000',
-          color:'white',
-         }}>Rs.{lists.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}</Typography>
-         </Box>
-          </CardContent>
-         
-          <CardActions>
-          <div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton aria-label='add to favorites' disableRipple style={{ pointerEvents: 'none' }}>
-              <Typography variant="body1" style={{ marginRight: '8px' }}>
-                Job Publisher:
-              </Typography>
-              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                {lists.job_provider_username}
-              </Typography>
-            </IconButton>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton aria-label='share' disableRipple style={{ pointerEvents: 'none' }}>
-              <Typography variant="body1" style={{ marginRight: '8px' }}>
-                Job Publishing Date:
-              </Typography>
-              <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                {lists.published_at_date}
-              </Typography>
-            </IconButton>
-          </div>
-        </div>
-
-
-          </CardActions>
-          
-        </Card>
-            )
-      })}
-      </Grid>
-      <Grid item xs={8} style={{marginTop:'0.5em'}}>
-      <AppBar position='sticky'>
-          <div style={{height:"100vh"}}>
-            <MapContainer center={[8.5241, 76.9366]} zoom={14} scrollWheelZoom={true}>
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-           <TheMapcomponent/>
-          
-              {AllListing.map((item)=>{
-                   function iconDisplay() {
-                    if (item.listing_type === 'House') { 
-                      return houseIcon;
-                    } else if (item.listing_type === 'Apartment') {
-                      return apartmentIcon;
-                    } else if (item.listing_type === 'Office') {
-                      return officeIcon;
-                    }
-                  }
-                return(
-                  <Marker 
-                  key={item.id}
-                  icon={iconDisplay()}
-                  position={[item.latitude, item.longitude]}>
-
-                  <Popup>
-                    <Typography variant="h5">{item.title}</Typography>
-                    <img src={item.picture1} style={{ height: '14rem', width: '18rem' }} alt="listing" />
-                    <Typography variant="body1">{item.description.substring(0,150)}...
-                    </Typography>
-                    <Button sx={{ backgroundColor: '#857be3' }} variant="container" fullWidth>
-                      Details
-                    </Button>
-                  </Popup>
-
-                  </Marker>
-                )
-              })}
-        </MapContainer>
-        </div>
-      </AppBar>
-      </Grid>
-    </Grid>
-  )
-}
-
-export default Listings
+// export default Test;

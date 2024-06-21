@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import {useImmerReducer} from 'use-immer';
 
-import { Box, Avatar, Button, Grid, Paper,  Typography, InputAdornment, Input,FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Avatar, Button, Grid, Paper,  Typography, InputAdornment,Alert, Input,FormControl,FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -22,9 +22,7 @@ import Kanjiramkulam from '../assets/Boroughs/Kanjiramkulam';
 import StateContext from '../context/StateContext';
 
 
-// import AdapterDayjs from '@mui/lab/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
+
 
 //Leaflet
 
@@ -46,6 +44,10 @@ const AreaOptions = [
 ]
 
 const TVMOptions = [
+    {
+        value:'',
+        label:'',
+    },
     {
         value: "Kovalam",
         label: "Kovalam",
@@ -114,30 +116,67 @@ const AddProperty = () => {
         userProfile:{
             agencyName:'',
             phoneNumber:'',
-        }  
+        },
+        titleErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        },
+        listingTypeErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        },   
+        PriceErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        }, 
+
+        DescriptionErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        }, 
+        AreaErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        },  
+        BoroughErrors:{
+            hashErrors:false,
+            errorMessage:'',
+        }, 
+
+       
     }
 
     function ReducerFunction(draft,action){
         switch (action.type) {
             case 'catchTitleChange':
                 draft.titleValue = action.titleChosen;
+                draft.titleErrors.hasErrors= false;
+                draft.titleErrors.errorMessage= '';
                 break;   
                 
             case 'catchListingTypeChange':
                 draft.listingTypeValue = action.listingTypeChosen;
+                draft.listingTypeErrors.hasErrors= false;
+                draft.listingTypeErrors.errorMessage= '';
                 break; 
                     
             case 'catchDescriptionValueChange':
                 draft.descriptionValue = action.descriptionChosen;
+                draft.DescriptionErrors.hasErrors= false;
+                draft.DescriptionErrors.errorMessage= '';
                 break; 
                 
 
             case 'catchAreaValueChange':
                 draft.areaValue = action.areaValueChosen;
+                draft.AreaErrors.hasErrors= false;
+                draft.AreaErrors.errorMessage= '';
                 break; 
 
             case 'catchBoroughValueChange':
                 draft.boroughValue = action.boroughValueChosen;
+                draft.BoroughErrors.hasErrors= false;
+                draft.BoroughErrors.errorMessage= '';
                 break; 
 
             case 'catchLatitudeValueChange':
@@ -150,6 +189,8 @@ const AddProperty = () => {
                 
             case 'catchPriceValueChange':
                 draft.priceValue = action.priceValueChosen;
+                draft.PriceErrors.hasErrors= false;
+                draft.PriceErrors.errorMessage= '';
                 break; 
 
             case 'catchPricture1ValueChange':
@@ -196,13 +237,80 @@ const AddProperty = () => {
                 draft.userProfile.agencyName = action.profileObject.agency_name;
                 draft.userProfile.phoneNumber= action.profileObject.phone_number;
                 break;
-                
-          
 
-           
-           
+            case 'catchTitleErrors':
+                if(action.titleChosen.length ===0){
+                    draft.titleErrors.hasErrors = true;
+                    draft.titleErrors.errorMessage = 'Title is required'
+                }
+                break;
+
+            case 'catchListingTypeErrors':
+                if(action.listingTypeChosen.length ===0){
+                    draft.listingTypeErrors.hasErrors = true;
+                    draft.listingTypeErrors.errorMessage = 'Type of building is required'
+                }
+                break;
+
+            case 'catchPriceErrors':
+                if(action.priceValueChosen.length ===0){
+                    draft.PriceErrors.hasErrors = true;
+                    draft.PriceErrors.errorMessage = 'Price is required'
+                }
+                break;
                 
-        }
+           case 'catchDescriptionErrors':
+                if(action.descriptionChosen.length <= 100){
+                    draft.DescriptionErrors.hasErrors = true;
+                    draft.DescriptionErrors.errorMessage = 'Description must be 100 words';
+                }
+                break;
+
+            case 'catchAreaErrors':
+                if(action.areaValueChosen.length ===0){
+                    draft.AreaErrors.hasErrors = true;
+                    draft.AreaErrors.errorMessage = 'Area is required'
+                }
+                break;
+
+            case 'catchBoroughErrors':
+                if(action.boroughValueChosen.length ===0){
+                    draft.BoroughErrors.hasErrors = true;
+                    draft.BoroughErrors.errorMessage = 'Borough is required'
+                }
+                break; 
+                
+            case 'emptyTitle':
+                draft.titleErrors.hasErrors = true
+                draft.titleErrors.errorMessage = 'This field must not be empty'
+                break;
+
+            case 'emptylistingType':
+                draft.listingTypeErrors.hasErrors = true
+                draft.listingTypeErrors.errorMessage = 'This field must not be empty'
+                break;
+
+            case 'emptyprice':
+                draft.PriceErrors.hasErrors = true
+                draft.PriceErrors.errorMessage = 'This field must not be empty'
+                break;
+
+            case 'emptydescription':
+                draft.DescriptionErrors.hasErrors = true
+                draft.DescriptionErrors.errorMessage = 'This field must not be empty'
+                break;
+
+            case 'emptyarea':
+                draft.AreaErrors.hasErrors = true
+                draft.AreaErrors.errorMessage = 'This field must not be empty'
+                break;
+
+            case 'emptyborough':
+                draft.BoroughErrors.hasErrors = true
+                draft.BoroughErrors.errorMessage = 'This field must not be empty'
+                break;
+                
+        } 
 }
     const [state,dispatch] = useImmerReducer(ReducerFunction,initialState)
     const navigate = useNavigate()
@@ -354,7 +462,47 @@ const AddProperty = () => {
     const Addjobhandle = (e) => {
         e.preventDefault();
         console.log('the form has been submitted')
-        dispatch({type:'changeSendRequest'})
+
+        if(!state.titleErrors.hasErrors && 
+            !state.listingTypeErrors. hasErrors && 
+            !state.PriceErrors.hasErrors &&
+            !state.DescriptionErrors.hasErrors &&
+            !state.AreaErrors.hasErrors &&
+            !state.BoroughErrors.hasErrors &&
+            state.latitudeValue && 
+            state.longitudeValue 
+           
+        ){
+            dispatch({type:'changeSendRequest'})
+
+        }
+        else if(state.titleValue === ''){
+            dispatch({type:'emptyTitle'})
+            window.scrollTo(0,0);
+        }
+        else if(state.listingTypeValue === ''){
+            dispatch({type:'emptylistingType'})
+            window.scrollTo(0,0);
+        }
+
+        else if(state.priceValue === ''){
+            dispatch({type:'emptyprice'})
+            window.scrollTo(0,0);
+        }
+        else if(state.descriptionValue === ''){
+            dispatch({type:'emptydescription'})
+            window.scrollTo(0,0);
+        }
+        
+        else if(state.areaValue === ''){
+            dispatch({type:'emptyarea'})
+            window.scrollTo(0,0);
+        }
+        else if(state.boroughValue === ''){
+            dispatch({type:'emptyborough'})
+            window.scrollTo(0,0);
+        }
+       
     }
 
     useEffect(() => {
@@ -390,7 +538,7 @@ const AddProperty = () => {
     
     const paperStyle = {
         padding: 20,
-        height: '180vh',
+        height: '200vh',
         width: '120%', // or specify a specific width like '500px'
         margin: '20px auto',
     };
@@ -414,19 +562,34 @@ const AddProperty = () => {
                         <h2 style={{ color: '#9d13bf' }}>Add Job</h2>
                     </Grid>
                     <Grid item container style={{marginTop:'1rem'}}>
-                    <TextField label='Job Title' id='title' placeholder='enter job title' variant='standard' style={btstyle} fullWidth required  value={state.titleValue} onChange={(e)=>dispatch({type:'catchTitleChange',titleChosen:e.target.value})}/>                    
+                    <TextField
+                label="Job Title"
+                id="title"
+                placeholder="Enter job title"
+                variant="standard"
+                style={{ marginBottom: '16px' }} // Adjust as needed
+                fullWidth
+                required
+                value={state.titleValue}
+                onChange={(e) => dispatch({ type: 'catchTitleChange', titleChosen: e.target.value })}
+                onBlur={(e) => dispatch({ type: 'catchTitleErrors', titleChosen: e.target.value })}
+                error={state.titleErrors.hasErrors}
+                helperText={state.titleErrors.errorMessage}
+            />                 
                     </Grid>  
 
                    
                     <Grid item container justifyContent='space-between' >
                     <Grid item xs={5} style={{ marginTop: '1rem' }}>
-                        <FormControl fullWidth required>
+                        <FormControl fullWidth required error={state.listingTypeErrors.hasErrors}>
                             <InputLabel id="Type of building">Type of building</InputLabel>
                             <Select
                                 variant='standard'
                                 id="listing_type"
                                 value={state.listingTypeValue}
                                 onChange={(e)=>dispatch({type:'catchListingTypeChange',listingTypeChosen:e.target.value})}
+                                onBlur={(e)=>dispatch({type:'catchListingTypeErrors',listingTypeChosen:e.target.value})}
+
                             >
                                 {listingtypeOptions.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -434,31 +597,47 @@ const AddProperty = () => {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {state.listingTypeErrors.hasErrors && (
+                        <FormHelperText>{state.listingTypeErrors.errorMessage}</FormHelperText>
+                    )}
                         </FormControl>
                     </Grid>
 
                     <Grid item container xs={5} style={{marginTop:'1rem'}}>
-                    <TextField label='Payment Amount per day' id='price' type="number" placeholder='enter price' variant='standard' style={btstyle} fullWidth required  value={state.priceValue} onChange={(e)=>dispatch({type:'catchPriceValueChange',priceValueChosen:e.target.value})}/>                    
+                    <TextField label='Payment Amount per day' id='price' type="number" placeholder='enter price' variant='standard' style={btstyle} fullWidth required  value={state.priceValue} 
+                    onChange={(e)=>dispatch({type:'catchPriceValueChange',priceValueChosen:e.target.value})}
+                    onBlur={(e)=>dispatch({type:'catchPriceErrors',priceValueChosen:e.target.value})}
+                    
+                    error ={state.PriceErrors.hasErrors ? true:false}
+                    helperText={state.PriceErrors.errorMessage}/>                    
                     </Grid> 
                     </Grid>
                     
                     <Grid item container style={{marginTop:'1rem'}}>
                     <TextField label='Job Description' id='description' placeholder='enter Description' variant='outlined' 
                     multiline rows={6}
-                    style={btstyle} fullWidth required  value={state.descriptionValue} onChange={(e)=>dispatch({type:'catchDescriptionValueChange',descriptionChosen:e.target.value})}/>                    
+                    style={btstyle} fullWidth required  value={state.descriptionValue} onChange={(e)=>dispatch({type:'catchDescriptionValueChange',descriptionChosen:e.target.value})}
+                    onBlur={(e)=>dispatch({type:'catchDescriptionErrors',descriptionChosen:e.target.value})}
+                    error ={state.DescriptionErrors.hasErrors ? true:false}
+                    helperText={state.DescriptionErrors.errorMessage}/>  
+                                  
                     </Grid> 
 
                     
 
                     <Grid item container justifyContent='space-between' >
                     <Grid item xs={5} style={{ marginTop: '1rem' }}>
-                        <FormControl fullWidth required>
+                        <FormControl fullWidth required error={state.AreaErrors.hasErrors}>
                             <InputLabel id="area">Area</InputLabel>
                             <Select
                                 variant='standard'
+                                style={{ marginBottom: '16px' }} // Adjust as needed
                                 id="area"
                                 value={state.areaValue}
                                 onChange={(e) => dispatch({ type: 'catchAreaValueChange', areaValueChosen: e.target.value })}
+                                onBlur={(e) => dispatch({ type: 'catchAreaErrors', areaValueChosen: e.target.value })}
+                                // error ={state.AreaErrors.hasErrors ? true:false}
+                                // helperText={state.AreaErrors.errorMessage}
                             >
                                 {AreaOptions.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -466,18 +645,24 @@ const AddProperty = () => {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {state.AreaErrors.hasErrors && (
+                            <FormHelperText>{state.AreaErrors.errorMessage}</FormHelperText>
+                        )}
                         </FormControl>
                     </Grid>
                     
 
                         <Grid item xs={5} style={{ marginTop: '1rem' }}>
-                        <FormControl fullWidth required>
+                        <FormControl fullWidth required error={state.AreaErrors.hasErrors}>
                             <InputLabel id="borough">Landmark</InputLabel>
                             <Select
                                 variant='standard'
                                 id="borough"
                                 value={state.boroughValue}
                                 onChange={(e)=>dispatch({type:'catchBoroughValueChange',boroughValueChosen:e.target.value})}
+                                onBlur={(e)=>dispatch({type:'catchBoroughErrors',boroughValueChosen:e.target.value})}
+                                error ={state.BoroughErrors.hasErrors ? true:false}
+                                helperText={state.BoroughErrors.errorMessage}
                             >
                                 {state.areaValue === 'kerala' ? TVMOptions.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -485,10 +670,22 @@ const AddProperty = () => {
                                     </MenuItem>
                                     )):""}
                                 </Select>
+                                {state.BoroughErrors.hasErrors && (
+                            <FormHelperText>{state.BoroughErrors.errorMessage}</FormHelperText>
+                        )}
                             </FormControl>
                         </Grid>
                     </Grid>
                     {/* map */}
+
+                    <Grid item style ={{marginTop:'1rem'}}>
+                        {state.latitudeValue && state.longitudeValue ? <Alert severity='success'>Your property is located @ 
+                            {state.latitudeValue} ,{state.longitudeValue} 
+
+                        </Alert>: <Alert severity='warning'>Locate your property on the map before submitting this form</Alert>}
+
+
+                    </Grid>
 
                 <Grid item container style ={{height:'35rem',marginTop:'1rem'}}>
                     <MapContainer center={[8.5241, 76.9366]} zoom={14} scrollWheelZoom={true}>

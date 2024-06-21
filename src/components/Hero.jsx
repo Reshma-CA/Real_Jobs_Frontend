@@ -3,9 +3,12 @@ import { Box, Typography, Button } from '@mui/material';
 import NavBar from '../layouts/NavBar';
 import HomeImg from '../assets/HomeImg.jpg';
 import { useState,useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '../layouts/Footer';
+import Chatbot_Engine from './Chatboat/Chatbot_Engine';
 
 const Hero = () => {
+  
   
  
   
@@ -42,7 +45,7 @@ const Hero = () => {
           <Typography variant='h6' color='tomato' pt={1}>
             Ready for a New Job?
           </Typography>
-          <Button className="glitter"
+          <Link to='/comon'><Button className="glitter"
             variant='contained'
             sx={{
               mt: 2,
@@ -58,12 +61,13 @@ const Hero = () => {
             }}
           >
             Find Jobs Here!
-          </Button>
+          </Button></Link>
           <Typography variant='body1' pb={2}>
             Browse Our Latest Job Listings!
           </Typography>
         </Box>
       </Box>
+      <Chatbot_Engine/>
       <Footer/>
     </Box>
   );

@@ -4,6 +4,12 @@ import { Box, Button, Paper, TableContainer, Table, TableHead, TableRow, TableCe
 import imageSrc from '../../assets/graph-wiki_ver_1.png';
 import Admin_Navbar from './Admin_Navbar'; 
 import JobClickGraph from './Graph/JobClickGraph';
+
+// Toast
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Dashboard = () => {
   return (
     <Box sx={{ display: 'flex' }}>

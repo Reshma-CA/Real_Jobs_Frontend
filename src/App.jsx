@@ -3,17 +3,21 @@ import NavBar from './layouts/NavBar'
 import {BrowserRouter as Router ,Route,Routes} from 'react-router-dom'
 import './App.css'
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { useImmerReducer } from 'use-immer'
 import Hero from './components/Hero'
 import Footer from './layouts/Footer'
 import Listings from './components/Listings'
 import Home from './components/Home'
-import Test from './components/Test'
+// import Test from './components/Test'
 import Register from './components/Register'
 import Login from './components/Login'
-// import Testing from './components/Testing'
+import Email_info from './components/Email_activation/Email_info';
+import Chatboat_Admin from './components/Chatboat/Chatboat_Admin'; 
+import Chatbot_Engine from './components/Chatboat/Chatbot_Engine';
+
 import AddProperty from './components/AddProperty'
 import Profile from './components/Profile'
 import AboutUs from './components/AboutUs'
@@ -132,14 +136,18 @@ function ReducerFunction(draft,action){
            <Route path="/filterdata" element={<FilterData />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/email_info" element={<Email_info />} />
+          <Route path="/chatboat_admin" element={<Chatboat_Admin />} />
+          <Route path="/chatboat_engine" element={<Chatbot_Engine />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/addproperty" element={<AddProperty />} />
           <Route path="/agency" element={<Agencies />} />
           <Route path="/agencydetail/:id" element={< AgencyDetail />} />
          
           <Route path="/aboutus" element={<AboutUs />} />
-
-          <Route path="/test" element={<Test />} />
+          {/* <Route path="/chatbot" element={<Chatboat_Admin/>} /> */}
+{/* 
+          <Route path="/test" element={<Test />} /> */}
           <Route path="/home" element={<Home />} />
 
            {/* Admin Routes */}

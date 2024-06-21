@@ -120,7 +120,7 @@ const ProfileUpdate = (props) => {
         backgroundPosition: 'center',
         minHeight: '100vh',
     };
-        const paperStyle={padding:20,height:'85vh', width:'100%', maxWidth:600 ,margin:'20px auto'}
+        const paperStyle={padding:20,height:'90vh', width:'100%', maxWidth:600 ,margin:'20px auto'}
         const avatarStyle = {backgroundColor:'#9d13bf'}
         const btstyle= {margin:'8px 0'}
 
