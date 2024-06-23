@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import ChatBotIMG from '../../../assets/Chatbot/Chat_bot.jpg';
+import messageSound from '../../../assets/Message_sound.wav';
 
 const EmailForm = () => {
   const [messages, setMessages] = useState([
@@ -9,6 +10,7 @@ const EmailForm = () => {
   ]);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
+  const audioRef = useRef(null); // Ref for audio element
 
   const qaPairs = {
     "hi": "How can I help you today",
@@ -32,6 +34,11 @@ const EmailForm = () => {
       const response = qaPairs[input] || "Sorry, I don't understand that question.";
       setMessages([...newMessages, { sender: 'bot', text: response }]);
       setInput('');
+
+      // Play message sound
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
     }
   };
 
@@ -70,7 +77,7 @@ const EmailForm = () => {
             style={{ 
               width: '50px', 
               height: '50px', 
-              marginTop:'38px',
+              marginTop: '38px',
               marginBottom: '45px', // Adjusted marginBottom
               borderRadius: '50%',
               border: '1px solid purple',
@@ -127,6 +134,8 @@ const EmailForm = () => {
           </div>
         </div>
       </div>
+      {/* Audio element for message sound */}
+      <audio ref={audioRef} src={messageSound} />
     </div>
   );
 }
