@@ -13,17 +13,22 @@ const EmailForm = () => {
   const audioRef = useRef(null); // Ref for audio element
 
   const qaPairs = {
-    "hi": "How can I help you today",
-    "What are your working hours?": "We are open Monday to Friday from 9 AM to 5 PM.",
-    "How can I contact support?": "You can contact our support team via email at support@example.com or call us at (123) 456-7890.",
-    "Where are you located?": "We are located at 123 Main Street, Anytown, USA.",
-    "What services do you offer?": "We offer a variety of services including web development, mobile app development, and digital marketing.",
-    "How can I schedule an appointment?": "You can schedule an appointment by calling us at (123) 456-7890 or booking online through our website.",
-    "What is your refund policy?": "We offer a full refund within 30 days of purchase if you are not satisfied with our services.",
-    "Do you offer technical support?": "Yes, we offer 24/7 technical support for all our products and services.",
-    "Can I get a free consultation?": "Yes, we offer a free 30-minute consultation for new clients.",
-    "How can I provide feedback?": "You can provide feedback by emailing us at feedback@example.com or filling out the feedback form on our website.",
-    "What payment methods do you accept?": "We accept all major credit cards, PayPal, and bank transfers."
+  "hi": "How can I help you today",
+  "What services do you offer?": "We offer services from plumbers, electricians, painters, coconut pluckers, and cleaners.",
+  "How can I book a service?": "You can post your requirement through our website or by calling us at (123) 456-7890.",
+  "What are your working hours?": "Our services are available Monday to Friday from 8 AM to 6 PM.",
+  "How can I contact customer support?": "You can contact our support team via email at support@example.com or call us at (123) 456-7890.",
+  "What is the cost of hiring a plumber?": "The cost varies depending on the job. Please request a quote for specific pricing.",
+  "Do you offer emergency services?": "Yes, we offer 24/7 emergency services for urgent issues.",
+  "Are your workers certified?": "Yes, all our workers are certified and experienced professionals.",
+  "How can I cancel a booking?": "You can cancel a booking through your account on our website or by contacting our support team.",
+  "Do you provide services on weekends?": "Yes, we provide services on weekends for an additional charge.",
+  "How can I provide feedback?": "You can provide feedback by emailing us at feedback@example.com or filling out the feedback form on our website.",
+  "What payment methods do you accept?": "We accept all major credit cards, PayPal, and bank transfers.",
+  "How do I know the worker is trustworthy?": "All our workers undergo background checks and are verified professionals.",
+  "Can I schedule a regular cleaning service?": "Yes, you can schedule regular cleaning services weekly, bi-weekly, or monthly.",
+  "What is your refund policy?": "We offer a full refund within 30 days if you are not satisfied with our services.",
+  "How long does it take to get a painter?": "Typically, we can have a painter at your location within 24-48 hours."
   };
 
   const handleSendMessage = () => {
