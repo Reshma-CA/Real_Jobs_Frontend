@@ -206,9 +206,9 @@ const CoomoPageListing = () => {
           </Grid>
         )}
 
-        <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom: '1rem' }} position='sticky' bottom={0}>
-          <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
-        </Stack>
+          <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom: '1rem' }} position='sticky' bottom={0}>
+            <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
+          </Stack>
         <Filter open={openAddModal} handleClose={handleCloseAddModal} />
       </Grid>
       <Footer />

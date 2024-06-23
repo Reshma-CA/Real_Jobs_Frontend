@@ -3,6 +3,7 @@ import { Link, useNavigate ,useParams} from 'react-router-dom';
 import axios from "axios";
 import {useImmerReducer} from 'use-immer';
 import NavBar from '../layouts/NavBar';
+import Footer from '../layouts/Footer';
 //img
 import BackImg from '../assets/image15.jpg';
 import profileImg from '../assets/defaultProfilePicture.jpg'
@@ -97,66 +98,68 @@ const AgencyDetail = () => {
 
   return (
     <div>
-       <NavBar/>
-        <Grid container justifyContent="center" alignItems="center" style={{ width: '50%', border: '2px solid black', padding: '5px', backgroundColor: '#ded3e3', margin: '0 auto', minHeight: '200px', marginTop:'1rem',marginBottom:'1rem' }}>
-                        <Grid item xs={12} sm={6}>
-                            <img style={{height:'10rem',width:'100%', maxWidth: '15rem', border:'0.5px solid black'}} src={state.userProfile.profilePic !== null ? state.userProfile.profilePic: profileImg}/> 
-                        </Grid>
-                        <Grid item container direction="column" xs={12} sm={6}>
-                            <Grid item>
-                                <Typography variant='h5' style={{textAlign:'center',marginTop:'1rem'}}>
-                                    <span style={{color:'#db2c78',fontWeight:'bold'}}>{state.userProfile.agencyName}</span>
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='h5' style={{textAlign:'center',marginTop:'1rem'}}>
-                                    <IconButton>
-                                   <LocalPhoneIcon/> {state.userProfile.phoneNumber} 
-                                   </IconButton>    
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid item style={{marginTop:'1rem',padding:'5px',fontSize:'20px'}}>
-                            {state.userProfile.bio}
-
-                        </Grid>
-                    </Grid>
-
-        <Grid container justifyContent='flex-start' spacing={2} style={{padding:'10px'}}>
-        {state.userProfile.job_providerListings.map(list=>{
-        const completeImageUrl = `${REACT_APP_API_URL}${list.picture1}`;
-            console.log(list.picture1)
-        return(
-          <Grid key={list.id} item style ={{marginTop:'1rem',maxWidth:'20rem'}}>
-            <Card >
-            <CardMedia
-              component= 'img'
-              sx={{ height: 140 }}
-              image={completeImageUrl ? completeImageUrl : profileImg}
-            
-              alt=" list picture1"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div" style={{fontWeight: 'bold',fontSize: '20px',color:'#9311ba'}}>
-                {list.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" >
-                {list.description.substring(0,100)}...
-                <Typography style ={{color:'#0e0112',fontWeight: 'bold',marginTop:'1rem'}}> Working Building Type: <span style={{color:'#791f94', fontSize: '15px',
-              fontWeight: 'bold',}}>{list.listing_type}</span></Typography>
-              </Typography>
-            </CardContent>
-            <CardActions style={{fontWeight: 'bold'}}>
-            
-             Rs:{list.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} <br></br><span>Per Day!</span>
-            </CardActions>
-            
-            
-          
-          </Card>
+      <NavBar />
+      <Grid container justifyContent='center' alignItems='center' style={{ width: '90%', border: '2px solid black', padding: '5px', backgroundColor: '#ded3e3', margin: '0 auto', minHeight: '200px', marginTop: '1rem', marginBottom: '1rem' }}>
+        <Grid item xs={12} sm={6}>
+          <img style={{ height: '10rem', width: '100%', maxWidth: '15rem', border: '0.5px solid black' }} src={state.userProfile.profilePic !== null ? state.userProfile.profilePic : profileImg} />
+        </Grid>
+        <Grid item container direction='column' xs={12} sm={6}>
+          <Grid item>
+            <Typography variant='h5' style={{ textAlign: 'center', marginTop: '1rem' }}>
+              <span style={{ color: '#db2c78', fontWeight: 'bold' }}>{state.userProfile.agencyName}</span>
+            </Typography>
           </Grid>
-        )
-    })}</Grid>
+          <Grid item>
+            <Typography variant='h6' style={{ textAlign: 'center', marginTop: '1rem' }}>
+              <IconButton>
+                <LocalPhoneIcon /> {state.userProfile.phoneNumber}
+              </IconButton>
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} style={{ marginTop: '1rem', padding: '5px', fontSize: '16px' }}>
+          <Typography variant='body1' style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+            {state.userProfile.bio}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container justifyContent='center' alignItems='center' style={{ width: '90%', 
+          
+         padding: '5px',  margin: '0 auto',
+          minHeight: '200px', marginTop: '1rem', marginBottom: '1rem' }}>
+
+      <Grid container justifyContent='flex-start' spacing={2} style={{ padding: '10px' }}>
+        {state.userProfile.job_providerListings.map(list => {
+          const completeImageUrl = `${REACT_APP_API_URL}${list.picture1}`;
+          console.log(list.picture1);
+          return (
+            <Grid key={list.id} item style={{ marginTop: '1rem', maxWidth: '20rem' }}>
+              <Card>
+                <CardMedia
+                  component='img'
+                  sx={{ height: 140 }}
+                  image={completeImageUrl ? completeImageUrl : profileImg}
+                  alt='list picture1'
+                />
+                <CardContent>
+                  <Typography gutterBottom variant='h5' component='div' style={{ fontWeight: 'bold', fontSize: '20px', color: '#9311ba' }}>
+                    {list.title}
+                  </Typography>
+                  <Typography variant='body2' color='text.secondary'>
+                    {list.description.substring(0, 100)}...
+                    <Typography style={{ color: '#0e0112', fontWeight: 'bold', marginTop: '1rem' }}> Working Building Type: <span style={{ color: '#791f94', fontSize: '15px', fontWeight: 'bold' }}>{list.listing_type}</span></Typography>
+                  </Typography>
+                </CardContent>
+                <CardActions style={{ fontWeight: 'bold' }}>
+                  Rs:{list.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} <br /><span>Per Day!</span>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+      </Grid>
+      <Footer/>
     </div>
   )
 }
