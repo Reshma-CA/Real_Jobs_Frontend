@@ -42,6 +42,8 @@ import Edit_job from './components/Admin_pannel/jobs/Edit_job';
 // import Edit_User from './components/Admin_pannel/Edit_User'
 // import User_Add from './components/Admin_pannel/User_Add'
 
+import Testing from './components/Testing';
+
 // Google
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -148,7 +150,8 @@ function ReducerFunction(draft,action){
           {/* <Route path="/chatbot" element={<Chatboat_Admin/>} /> */}
 {/* 
           <Route path="/test" element={<Test />} /> */}
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Home />} /> 
+          <Route path="/test" element={<Testing  />} />
 
            {/* Admin Routes */}
 

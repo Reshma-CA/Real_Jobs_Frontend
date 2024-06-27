@@ -1,25 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Grid, Card, Box, Paper, InputBase, CardHeader, CardMedia, CardContent, CircularProgress, IconButton, Typography, Button, CardActions, Pagination, Stack } from '@mui/material';
-import { useNavigate ,Link} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import NavBar from '../layouts/NavBar';
 import Footer from '../layouts/Footer';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import Filter from './Filter/Filter';
-import { toast } from 'react-toastify';
+import StateContext from '../context/StateContext';
+import DispatchContxt from '../context/DispatchContxt';
+import Swal from 'sweetalert2';
 
 const CoomoPageListing = () => {
+  const GlobalState = useContext(StateContext);
+  const GlobalDispatch = useContext(DispatchContxt);
+
   const [openAddModal, setOpenAddModal] = useState(false);
   const [allListing, setAllListing] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [dataIsLoading, setDataIsLoading] = useState(true);
   const [input, setInput] = useState('');
   const [page, setPage] = useState(1);
-  const itemsPerPage = 8; // Number of items per page
+  const itemsPerPage = 8;
 
   const navigate = useNavigate();
-  // const [openAddModal, setOpenAddModal] = useState(false);
 
   const handleOpenAddModal = () => {
     setOpenAddModal(true);
@@ -44,7 +48,7 @@ const CoomoPageListing = () => {
     GetAllListings();
     return () => {
       source.cancel();
-    }
+    };
   }, []);
 
   const handlePageChange = (event, value) => {
@@ -58,7 +62,7 @@ const CoomoPageListing = () => {
       (item.title && item.title.toLowerCase().includes(value.toLowerCase()))
     ));
     setSearchResults(filteredResults);
-    setPage(1); // Reset to the first page on new search
+    setPage(1);
   };
 
   const handleJobClick = async (Id) => {
@@ -70,6 +74,19 @@ const CoomoPageListing = () => {
     }
   };
 
+  const handleMoreDetailsClick = (id) => {
+    if (GlobalState.userIsLogged) {
+      navigate(`/listings/${id}`);
+    } else {
+      Swal.fire({
+        title: 'Please login',
+        text: 'You need to be logged in to view more details.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    }
+  };
+
   if (dataIsLoading) {
     return (
       <Grid container justifyContent='center' alignItems='center' style={{ height: '100vh' }}>
@@ -78,7 +95,6 @@ const CoomoPageListing = () => {
     );
   }
 
-  // Calculate total number of pages
   const pageCount = Math.ceil(searchResults.length / itemsPerPage);
 
   return (
@@ -162,26 +178,25 @@ const CoomoPageListing = () => {
                     </div>
                   </div>
                 </CardActions>
-
-                <Link to={`/listings/${lists.id}`} onClick={() => handleJobClick(lists.id)}>
-                  <Button className="glitter"
-                    variant='contained'
-                    sx={{
-                      mt: 2,
-                      mb: 4,
-                      width: '100%',
-                      backgroundColor: '#e15cf2',
-                      color: '#1a1819',
-                      fontSize: '15px',
-                      fontWeight: 'bold',
-                      '&:hover': {
-                        backgroundColor: '#7d1c7d',
-                      },
-                    }}
-                  >
-                    More Details!
-                  </Button>
-                </Link>
+                
+                <Button className="glitter"
+                  variant='contained'
+                  sx={{
+                    mt: 2,
+                    mb: 4,
+                    width: '100%',
+                    backgroundColor: '#e15cf2',
+                    color: '#1a1819',
+                    fontSize: '15px',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: '#7d1c7d',
+                    },
+                  }}
+                  onClick={() => handleMoreDetailsClick(lists.id)}
+                >
+                  More Details!
+                </Button>
               </Card>
             </Grid>
           ))
@@ -206,9 +221,9 @@ const CoomoPageListing = () => {
           </Grid>
         )}
 
-          <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom: '1rem' }} position='sticky' bottom={0}>
-            <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
-          </Stack>
+        <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom: '1rem' }} position='sticky' bottom={0}>
+          <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
+        </Stack>
         <Filter open={openAddModal} handleClose={handleCloseAddModal} />
       </Grid>
       <Footer />
