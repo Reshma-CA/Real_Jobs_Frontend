@@ -130,7 +130,7 @@ const Login = () => {
             emailInfo: response.data.email,
             IdInfo: response.data.id
           });
-          toast.success('Login successfully!');
+          // toast.success('Login successfully!');
           navigate('/');
         } catch (error) {
           toast.error('Failed to Login');

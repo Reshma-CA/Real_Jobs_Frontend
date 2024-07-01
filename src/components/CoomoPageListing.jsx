@@ -65,9 +65,30 @@ const CoomoPageListing = () => {
     setPage(1);
   };
 
-  const handleJobClick = async (Id) => {
+  // const handleJobClick = async (Id) => {
+  //   try {
+  //     const response = await axios.post(`http://127.0.0.1:8000/api/track_click/${Id}/`);
+  //     console.log('Response:', response);
+  //   } catch (error) {
+  //     console.error('Error tracking click:', error);
+  //   }
+  // };
+
+  // const handleMoreDetailsClick = (id) => {
+  //   if (GlobalState.userIsLogged) {
+  //     navigate(`/listings/${id}`);
+  //   } else {
+  //     Swal.fire({
+  //       title: 'Please login',
+  //       text: 'You need to be logged in to view more details.',
+  //       icon: 'warning',
+  //       confirmButtonText: 'OK'
+  //     });
+  //   }
+  // };
+  const handleJobClick = async (id) => {
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/track_click/${Id}/`);
+      const response = await axios.post(`http://127.0.0.1:8000/api/track_click/${id}/`);
       console.log('Response:', response);
     } catch (error) {
       console.error('Error tracking click:', error);
@@ -75,6 +96,7 @@ const CoomoPageListing = () => {
   };
 
   const handleMoreDetailsClick = (id) => {
+    handleJobClick(id); // Track the job click
     if (GlobalState.userIsLogged) {
       navigate(`/listings/${id}`);
     } else {
@@ -86,7 +108,6 @@ const CoomoPageListing = () => {
       });
     }
   };
-
   if (dataIsLoading) {
     return (
       <Grid container justifyContent='center' alignItems='center' style={{ height: '100vh' }}>
@@ -221,9 +242,11 @@ const CoomoPageListing = () => {
           </Grid>
         )}
 
-        <Stack spacing={2} style={{ alignItems: 'center', marginTop: '1rem', margin: 'auto', marginBottom: '1rem' }} position='sticky' bottom={0}>
+      <Box sx={{ position: 'relative', zIndex: 1000, padding: '1rem', backgroundColor: '#fff', width: '100%', textAlign: 'center' }}>
+        <Stack spacing={2} direction="row" justifyContent="center">
           <Pagination count={pageCount} page={page} onChange={handlePageChange} color="secondary" showFirstButton showLastButton />
         </Stack>
+      </Box>
         <Filter open={openAddModal} handleClose={handleCloseAddModal} />
       </Grid>
       <Footer />

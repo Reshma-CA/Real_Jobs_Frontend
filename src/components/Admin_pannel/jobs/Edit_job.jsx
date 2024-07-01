@@ -98,7 +98,7 @@ const Edit_job = () => {
     
       <Grid container justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4}>
-          <Paper elevation={10} style={{ padding: 20, height: '120vh', width: '100%', maxWidth: 380, margin: '20px auto', backgroundColor: '#f4e6fa' }}>
+          <Paper elevation={10} style={{ padding: 20, height: '130vh', width: '100%', maxWidth: 380, margin: '20px auto', backgroundColor: '#f4e6fa' }}>
             <Grid align='center'>
               <h2 style={{ color: '#9d13bf' }}>Update</h2>
             </Grid>
