@@ -26,4 +26,4 @@ Database: PostgreSQL for robust data management.
 
 📂 GitHub Repositories:
 
-**Frontend Repository link**: [https://github.com/Reshma-CA/Real_Jobs_Frontend](https://github.com/Reshma-CA/RealJobs_Backend)
+**Backend Repository link**: [https://github.com/Reshma-CA/Real_Jobs_Frontend](https://github.com/Reshma-CA/RealJobs_Backend)
